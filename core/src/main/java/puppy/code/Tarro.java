@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 
 
-public class Tarro {
+public class Tarro implements Desechable{
 	   private Rectangle bucket;
 	   private Texture bucketImage;
 	   private Sound sonidoHerido;
@@ -90,14 +90,19 @@ public class Tarro {
 		   if(bucket.x < 0) bucket.x = 0;
 		   if(bucket.x > 800 - 64) bucket.x = 800 - 64;
 	   }
+    @Override
+    public void liberarRecursos() {
+        // Libera la textura (la imagen del tarro)
+        this.bucketImage.dispose();
+        // Libera el sonido de ser herido
+        this.sonidoHerido.dispose();
+    }
 
 
-	public void destruir() {
-		    bucketImage.dispose();
-	   }
 
    public boolean estaHerido() {
 	   return herido;
    }
+
 
 }
