@@ -2,5 +2,11 @@ bucket.png
 drop.png
 drop.wav
 dropBad.png
+escudo.png
 hurt.ogg
+paraguas.png
+perro.png
+persona.png
 rain.mp3
+roca.png
+vikingo.png

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameLluvia extends ApplicationAdapter {
@@ -16,44 +17,80 @@ public class GameLluvia extends ApplicationAdapter {
     private BitmapFont font;
 
     // Declaración de objetos principales
-    private Tarro tarro;
-    private GestorGotas gestorGotas; // Usando el nombre exacto de tu clase GestorGotas
+    private ReceptorAbstracto jugador;
+    private GestorGotas gestorGotas;
+    private GestorNiveles gestorNiveles;
 
-    // ATRIBUTOS PARA MANEJAR LOS ASSETS que GameLluvia crea y otros usan
-    private Texture texturaTarro;
+    // ATRIBUTOS PARA MANEJAR LOS ASSETS
+    // ASSETS DE GOTAS Y SONIDO
     private Texture texturaGotaBuena;
     private Texture texturaGotaMala;
     private Sound sonidoGota;
     private Music musicaLluvia;
     private Sound sonidoHerido;
 
+    // ASSETS DE RECEPTORES (5)
+    private Texture texturaTarro;
+    private Texture texturaParaguas;
+    private Texture texturaPersona;
+    private Texture texturaPerro;
+    private Texture texturaVikingo;
+
+    // ASSETS NUEVOS PARA NIVELES (Roca y Escudo)
+    private Texture texturaRoca; // NUEVO
+    private Texture texturaEscudo; // NUEVO
+
 
     @Override
     public void create () {
         font = new BitmapFont();
 
-        // 1. Cargar ASSETS del Jugador (Tarro)
-        // El Tarro necesita la textura y el sonido de ser herido
+        // 1. Cargar ASSETS COMUNES y de Receptor
         this.sonidoHerido = Gdx.audio.newSound(Gdx.files.internal("hurt.ogg"));
-        this.texturaTarro = new Texture(Gdx.files.internal("bucket.png"));
-        tarro = new Tarro(this.texturaTarro, this.sonidoHerido);
 
-        // 2. Cargar ASSETS de la Lluvia (Gotas y música)
+        // 2. CARGAR TODAS LAS TEXTURAS DE LOS 5 RECEPTORES
+        this.texturaTarro = new Texture(Gdx.files.internal("bucket.png"));
+        this.texturaParaguas = new Texture(Gdx.files.internal("paraguas.png"));
+        this.texturaPersona = new Texture(Gdx.files.internal("persona.png"));
+        this.texturaPerro = new Texture(Gdx.files.internal("perro.png"));
+        this.texturaVikingo = new Texture(Gdx.files.internal("vikingo.png"));
+
+        // 3. CARGAR TEXTURAS NUEVAS PARA LOS NIVELES
+        this.texturaRoca = new Texture(Gdx.files.internal("roca.png")); // ¡ASUME roca.png!
+        this.texturaEscudo = new Texture(Gdx.files.internal("escudo.png")); // ¡ASUME escudo.png!
+
+        // 4. Cargar ASSETS de la Lluvia
         this.texturaGotaBuena = new Texture(Gdx.files.internal("drop.png"));
-        this.texturaGotaMala = new Texture(Gdx.files.internal("dropBad.png")); // Asumiendo dropBad.png
+        this.texturaGotaMala = new Texture(Gdx.files.internal("dropBad.png"));
         this.sonidoGota = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
         this.musicaLluvia = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
 
-        // 3. Inicializar GestorGotas, pasando los ASSETS
-        gestorGotas = new GestorGotas(this.texturaGotaBuena, this.texturaGotaMala, this.sonidoGota, this.musicaLluvia);
+        // 5. Crear el Array de Texturas para el Gestor de Niveles
+        Array<Texture> texturasReceptores = new Array<>();
+        texturasReceptores.add(this.texturaTarro);
+        texturasReceptores.add(this.texturaParaguas);
+        texturasReceptores.add(this.texturaPersona);
+        texturasReceptores.add(this.texturaPerro);
+        texturasReceptores.add(this.texturaVikingo);
 
-        // 4. Inicialización de Cámara y Batch
+        // 6. Inicializar Gestores
+        this.gestorNiveles = new GestorNiveles(texturasReceptores, this.sonidoHerido);
+
+        // ¡PASAMOS LAS NUEVAS TEXTURAS AL CONSTRUCTOR DE GESTORGOTAS!
+        this.gestorGotas = new GestorGotas(
+            this.texturaGotaBuena, this.texturaGotaMala, this.sonidoGota, this.musicaLluvia,
+            this.texturaRoca, this.texturaEscudo // TEXTURAS NUEVAS
+        );
+
+        // 7. El GestorNiveles crea el jugador INICIAL (Nivel 1)
+        this.jugador = this.gestorNiveles.crearReceptor(1);
+
+        // 8. Inicialización y Creación
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
         batch = new SpriteBatch();
 
-        // 5. Creación de objetos (inicialización de posiciones y arrays)
-        tarro.crear();
+        this.jugador.crear();
         gestorGotas.crear();
     }
 
@@ -65,28 +102,31 @@ public class GameLluvia extends ApplicationAdapter {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
-        // Dibujar textos (puntos y vidas)
-        font.draw(batch, "Gotas totales: " + tarro.getPuntos(), 5, 475);
-        font.draw(batch, "Vidas : " + tarro.getVidas(), 720, 475);
+        // Dibujar textos (puntos, vidas y NIVEL)
+        font.draw(batch, "Gotas totales: " + jugador.getPuntos(), 5, 475);
+        font.draw(batch, "Vidas : " + jugador.getVidas(), 720, 475);
+        font.draw(batch, "Nivel: " + gestorNiveles.getNivelActual(), 350, 475);
 
-        // =======================================================
         // LÓGICA DE CONTROL DEL JUEGO
-        // =======================================================
-        if (!tarro.isGameOver()) {
+        if (!jugador.isGameOver()) {
 
-            // Movimiento y caída solo ocurren si el tarro NO está herido
-            // Tu clase Tarro ya tiene la lógica de movimiento, así que no hace falta el if anidado
-            tarro.actualizarMovimiento();
-            gestorGotas.actualizarMovimiento(tarro);
+            // 1. Verificar avance de nivel
+            // NOTA: Si el nivel cambia, el GestorNiveles internamente reemplaza el objeto jugador
+            // por un nuevo receptor (Paraguas, Persona, etc.)
+            this.jugador = this.gestorNiveles.actualizarEstado(this.jugador.getPuntos(), this.jugador);
+
+            // 2. Movimiento y colisiones
+            jugador.actualizarMovimiento();
+            gestorGotas.actualizarMovimiento(jugador, gestorNiveles);
 
         } else {
-            // Lógica de Game Over: Muestra un mensaje
+            // Lógica de Game Over
             font.draw(batch, "GAME OVER", 350, 240);
-            this.musicaLluvia.stop(); // Detenemos la música al perder
+            this.musicaLluvia.stop();
         }
 
         // Dibujo
-        tarro.dibujar(batch);
+        jugador.dibujar(batch);
         gestorGotas.actualizarDibujoLluvia(batch);
 
         batch.end();
@@ -94,10 +134,19 @@ public class GameLluvia extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        // Implementación de la interfaz Desechable (GM1.5)
-        // Llama a liberarRecursos() en las clases que implementan la interfaz.
-        ((Desechable)this.tarro).liberarRecursos();
+        // 1. Llama a la INTERFAZ DESECHABLE (GM1.5)
+        ((Desechable)this.jugador).liberarRecursos();
         ((Desechable)this.gestorGotas).liberarRecursos();
+
+        // 2. Llama al método DISPOSE() DIRECTO de LibGDX (Texturas que GameLluvia cargó)
+        this.texturaParaguas.dispose();
+        this.texturaPersona.dispose();
+        this.texturaPerro.dispose();
+        this.texturaVikingo.dispose();
+
+        // LIBERACIÓN DE LAS NUEVAS TEXTURAS
+        this.texturaRoca.dispose();
+        this.texturaEscudo.dispose();
 
         // Libera los elementos que GameLluvia maneja directamente
         this.batch.dispose();

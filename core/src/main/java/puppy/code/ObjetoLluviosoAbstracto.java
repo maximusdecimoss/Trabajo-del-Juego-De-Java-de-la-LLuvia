@@ -1,4 +1,5 @@
 // Archivo: ObjetoLluviosoAbstracto.java
+
 package puppy.code;
 
 import com.badlogic.gdx.Gdx;
@@ -21,17 +22,16 @@ public abstract class ObjetoLluviosoAbstracto {
     // El objeto constructor
     public ObjetoLluviosoAbstracto(Texture textura, float posicionX) {
         this.textura = textura;
-        // Inicializa el área de colisión y la posición de inicio (arriba)
         this.limites = new Rectangle(posicionX, 480.0F, 64.0F, 64.0F);
     }
 
-    // MÉTODO ABSTRACTO: Cada objeto DEBE definir su efecto al colisionar.
-    // (Cumple GM1.6: Polimorfismo)
-    public abstract void aplicarEfecto(Tarro receptor);
+    // MÉTODO ABSTRACTO (GM1.6): Ahora recibe el GestorNiveles para la penalización progresiva
+    public abstract void aplicarEfecto(ReceptorAbstracto receptor, GestorNiveles gestor);
 
-    // Lógica CONCRETA: Actualiza la posición del objeto (la caída)
-    public void actualizar() {
-        this.limites.y -= this.velocidadCaida * Gdx.graphics.getDeltaTime();
+    // Lógica CONCRETA: Actualiza la posición del objeto (recibe factor de velocidad del GestorGotas)
+    public void actualizar(float factorVelocidad) {
+        // Multiplicamos la velocidad base por el factor de dificultad del nivel
+        this.limites.y -= this.velocidadCaida * factorVelocidad * Gdx.graphics.getDeltaTime();
     }
 
     // Lógica CONCRETA: Dibuja el objeto

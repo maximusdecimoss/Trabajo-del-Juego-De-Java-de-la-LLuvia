@@ -1,4 +1,3 @@
-// Archivo: Lluvia.java (Refactorizado)
 package puppy.code;
 
 import com.badlogic.gdx.audio.Music;
@@ -16,7 +15,6 @@ import com.badlogic.gdx.utils.TimeUtils;
 public class GestorGotas implements Desechable {
 
     // ATRIBUTOS
-    // 1. Array principal: Ahora almacena el tipo abstracto.
     private Array<ObjetoLluviosoAbstracto> objetosLluviosos;
 
     private long tiempoUltimaGota;
@@ -25,90 +23,129 @@ public class GestorGotas implements Desechable {
     private Sound sonidoGota;
     private Music musicaLluvia;
 
+    // ATRIBUTOS NUEVOS PARA NIVELES > 1
+    private Texture texturaRoca;
+    private Texture texturaEscudo;
 
-    // CONSTRUCTOR
-    // Recibe los assets y los almacena (responsabilidad del gestor)
-    public GestorGotas(Texture texBuena, Texture texMala, Sound sonido, Music musica) {
+
+    // CONSTRUCTOR: Ahora debe recibir las nuevas texturas
+    public GestorGotas(Texture texBuena, Texture texMala, Sound sonido, Music musica, Texture texRoca, Texture texEscudo) {
         this.musicaLluvia = musica;
         this.sonidoGota = sonido;
         this.texturaGotaBuena = texBuena;
         this.texturaGotaMala = texMala;
+        // Almacenar las nuevas texturas
+        this.texturaRoca = texRoca;
+        this.texturaEscudo = texEscudo;
     }
 
     // CREACIÓN
     public void crear() {
-        // Inicializamos el array principal con el tipo abstracto
         this.objetosLluviosos = new Array<ObjetoLluviosoAbstracto>();
-        this.crearObjetoLluvioso();
+        // NOTA: crearObjetoLluvioso() no se llama aquí, sino en actualizarMovimiento.
         this.musicaLluvia.setLooping(true);
         this.musicaLluvia.play();
     }
 
-    private void crearObjetoLluvioso() {
+    // LÓGICA DE FÁBRICA: Decide qué objeto crear basado en el nivel
+    private void crearObjetoLluvioso(GestorNiveles gestor) { // MÉTODO MODIFICADO: AHORA RECIBE EL GESTOR
         float posicionX = (float)MathUtils.random(0, 736);
+        int nivelActual = gestor.getNivelActual();
 
-        // LÓGICA DE GENERACIÓN (Nivel 1: Gota Buena y Mala)
-        if (MathUtils.random(1, 10) < 3) {
-            // Creamos una Gota Mala
-            this.objetosLluviosos.add(new GotaMala(this.texturaGotaMala, posicionX));
-        } else {
-            // Creamos una Gota Buena
-            this.objetosLluviosos.add(new GotaBuena(this.texturaGotaBuena, posicionX));
+        ObjetoLluviosoAbstracto nuevoObjeto = null;
+
+        // LÓGICA DE CREACIÓN BASADA EN EL NIVEL
+        if (nivelActual == 1) {
+            // Nivel 1: Solo Gota Buena y Gota Mala (Probabilidad 70/30)
+            if (MathUtils.random(1, 10) < 3) {
+                nuevoObjeto = new GotaMala(this.texturaGotaMala, posicionX);
+            } else {
+                nuevoObjeto = new GotaBuena(this.texturaGotaBuena, posicionX);
+            }
+        } else if (nivelActual == 2) {
+            // Nivel 2: Introduce Roca y Escudo
+            int probabilidad = MathUtils.random(1, 10);
+
+            if (probabilidad < 2) {
+                // Roca (Daño Doble) - 10% de probabilidad
+                nuevoObjeto = new Roca(this.texturaRoca, posicionX);
+            } else if (probabilidad == 2) {
+                // Escudo (Bonificación) - 10% de probabilidad
+                nuevoObjeto = new Escudo(this.texturaEscudo, posicionX);
+            } else if (probabilidad < 5) {
+                // Gota Mala - 20% de probabilidad
+                nuevoObjeto = new GotaMala(this.texturaGotaMala, posicionX);
+            } else {
+                // Gota Buena - 60% de probabilidad
+                nuevoObjeto = new GotaBuena(this.texturaGotaBuena, posicionX);
+            }
+        }
+        // TODO: Implementar lógica para Nivel 3, 4, 5...
+
+        // Añadir el objeto si se creó
+        if (nuevoObjeto != null) {
+            this.objetosLluviosos.add(nuevoObjeto);
         }
 
         this.tiempoUltimaGota = TimeUtils.nanoTime();
     }
 
-    // ACTUALIZACIÓN DE MOVIMIENTO Y COLISIONES (DEMOSTRACIÓN DE POLIMORFISMO GM1.6)
-    public void actualizarMovimiento(Tarro tarro) {
-        // Generar nueva gota
-        if (TimeUtils.nanoTime() - this.tiempoUltimaGota > 500000000L) { // Reducido para que la lógica de caída sea más rápida
-            this.crearObjetoLluvioso();
+    // ACTUALIZACIÓN DE MOVIMIENTO Y COLISIONES
+    public void actualizarMovimiento(ReceptorAbstracto receptor, GestorNiveles gestorNiveles) {
+
+        float factorVelocidad = 1.0f + (gestorNiveles.getNivelActual() - 1) * 0.2f;
+        int nivelActual = gestorNiveles.getNivelActual();
+
+        // Generar nueva gota: Aumenta la frecuencia de aparición con el nivel
+        if (TimeUtils.nanoTime() - this.tiempoUltimaGota > 1000000000L / nivelActual) {
+            this.crearObjetoLluvioso(gestorNiveles); // LLAMADA CORREGIDA
         }
 
         // Iterar y actualizar todos los objetos
         for(int i = 0; i < this.objetosLluviosos.size; ++i) {
             ObjetoLluviosoAbstracto objeto = this.objetosLluviosos.get(i);
 
-            objeto.actualizar(); // Lógica de caída heredada (GM1.4)
+            // Llama al método actualizado que recibe el factor de velocidad
+            objeto.actualizar(factorVelocidad);
 
             // 1. Eliminar si está fuera de pantalla
             if (objeto.estaFueraDePantalla()) {
                 this.objetosLluviosos.removeIndex(i);
-                --i; // Ajustamos el índice
+                --i;
                 continue;
             }
 
             // 2. Chequeo de colisión
-            if (objeto.obtenerLimites().overlaps(tarro.getArea())) {
+            if (objeto.obtenerLimites().overlaps(receptor.getArea())) {
 
-                // *** POLIMORFISMO (GM1.6) ***
-                // La llamada es la misma para todos, pero GotaBuena suma y GotaMala daña.
-                objeto.aplicarEfecto(tarro);
+                // POLIMORFISMO
+                objeto.aplicarEfecto(receptor, gestorNiveles);
 
-                this.sonidoGota.play(); // El sonido es común a todas las colisiones
+                this.sonidoGota.play();
 
-                // Lógica común: el objeto desaparece tras colisionar
                 this.objetosLluviosos.removeIndex(i);
-                --i; // Ajustamos el índice
+                --i;
             }
         }
     }
+    // ----------------------------------------------------------------------------------
 
     // DIBUJO POLIMÓRFICO
     public void actualizarDibujoLluvia(SpriteBatch batch) {
         for(ObjetoLluviosoAbstracto objeto : this.objetosLluviosos) {
-            objeto.dibujar(batch); // La lógica de dibujo es heredada
+            objeto.dibujar(batch);
         }
     }
 
     // LIBERACIÓN DE RECURSOS (GM1.5)
     @Override
     public void liberarRecursos() {
-        // Asegúrate de que las texturas, sonido y música se liberen
         this.sonidoGota.dispose();
         this.musicaLluvia.dispose();
         this.texturaGotaBuena.dispose();
         this.texturaGotaMala.dispose();
+        // Liberar las nuevas texturas cargadas
+        this.texturaRoca.dispose();
+        this.texturaEscudo.dispose();
     }
 }
