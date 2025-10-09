@@ -19,16 +19,16 @@ public class Tarro {
 	   private boolean herido = false;
 	   private int tiempoHeridoMax=50;
 	   private int tiempoHerido;
-	   
+
 	   public Tarro(Texture tex, Sound ss) {
 		   bucketImage = tex;
 		   sonidoHerido = ss;
 	   }
-	   
+
 		public int getVidas() {
 			return vidas;
 		}
-	
+
 		public int getPuntos() {
 			return puntos;
 		}
@@ -38,8 +38,8 @@ public class Tarro {
 		public void sumarPuntos(int pp) {
 			puntos+=pp;
 		}
-		
-	
+
+
 	   public void crear() {
 
 		      bucket = new Rectangle();
@@ -48,25 +48,34 @@ public class Tarro {
 		      bucket.width = 64;
 		      bucket.height = 64;
 	   }
+
 	   public void dañar() {
-		  vidas--;
-		  herido = true;
-		  tiempoHerido=tiempoHeridoMax;
-		  sonidoHerido.play();
+           //solo baja vidas si estas son mayores a 0
+           if(this.vidas > 0) {
+               --this.vidas;
+           this.herido = true;
+           this.tiempoHerido = this.tiempoHeridoMax;
+           this.sonidoHerido.play();
+           }
 	   }
+
+       public boolean isGameOver() {
+           return this.vidas <= 0;
+       }
+
 	   public void dibujar(SpriteBatch batch) {
-		 if (!herido)  
+		 if (!herido)
 		   batch.draw(bucketImage, bucket.x, bucket.y);
 		 else {
-		
+
 		   batch.draw(bucketImage, bucket.x, bucket.y+ MathUtils.random(-5,5));
 		   tiempoHerido--;
 		   if (tiempoHerido<=0) herido = false;
 		 }
-	   } 
-	   
-	   
-	   public void actualizarMovimiento() { 
+	   }
+
+
+	   public void actualizarMovimiento() {
 		   // movimiento desde mouse/touch
 		   /*if(Gdx.input.isTouched()) {
 			      Vector3 touchPos = new Vector3();
@@ -81,14 +90,14 @@ public class Tarro {
 		   if(bucket.x < 0) bucket.x = 0;
 		   if(bucket.x > 800 - 64) bucket.x = 800 - 64;
 	   }
-	    
+
 
 	public void destruir() {
 		    bucketImage.dispose();
 	   }
-	
+
    public boolean estaHerido() {
 	   return herido;
    }
-	   
+
 }
