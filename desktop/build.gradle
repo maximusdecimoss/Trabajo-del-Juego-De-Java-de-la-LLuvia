@@ -1,0 +1,62 @@
+apply plugin: 'java-library'
+apply plugin: 'eclipse'
+
+// Asegúrate de que $gdxVersion esté definido en el build.gradle principal
+def gdxVersion = project.ext.gdxVersion
+
+// Corrige la compatibilidad de Java a 11 para que coincida con el módulo 'core'
+sourceCompatibility = 11
+sourceSets.main.java.srcDirs = [ "src/" ]
+// CORRECCIÓN FINAL: Apunta a la carpeta 'assets' en la raíz (sin '/core/')
+sourceSets.main.resources.srcDirs = ["../assets"]
+
+project.ext.mainClassName = "com.mygdx.game.DesktopLauncher"
+// CORRECCIÓN FINAL: Apunta a la carpeta 'assets' en la raíz (sin '/core/')
+project.ext.assetsDir = new File("../assets")
+
+import org.gradle.internal.os.OperatingSystem
+
+// BLOQUE DE DEPENDENCIAS (Añadido para resolver el NoClassDefFoundError)
+dependencies {
+  implementation project(":core")
+  implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+  implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+}
+
+
+task run(dependsOn: classes, type: JavaExec) {
+  main = project.mainClassName
+  classpath = sourceSets.main.runtimeClasspath
+  standardInput = System.in
+  workingDir = project.assetsDir
+  ignoreExitValue = true
+
+  if (OperatingSystem.current() == OperatingSystem.MAC_OS) {
+    jvmArgs += "-XstartOnFirstThread"
+  }
+}
+
+task debug(dependsOn: classes, type: JavaExec) {
+  main = project.mainClassName
+  classpath = sourceSets.main.runtimeClasspath
+  standardInput = System.in
+  workingDir = project.assetsDir
+  ignoreExitValue = true
+  debug = true
+}
+
+task dist(type: Jar) {
+  duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+  manifest {
+    attributes 'Main-Class': project.mainClassName
+  }
+  dependsOn configurations.runtimeClasspath
+  from {
+    configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+  }
+  with jar
+}
+
+dist.dependsOn classes
+
+eclipse.project.name = appName + "-desktop"
