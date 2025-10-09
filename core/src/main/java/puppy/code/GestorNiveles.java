@@ -5,10 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 
 // IMPORTS NECESARIOS PARA PODER INSTANCIAR LOS PERSONAJES
-import puppy.code.Paraguas;
-import puppy.code.Persona;
-import puppy.code.Perro;
-import puppy.code.Vikingo;
 
 
 /**

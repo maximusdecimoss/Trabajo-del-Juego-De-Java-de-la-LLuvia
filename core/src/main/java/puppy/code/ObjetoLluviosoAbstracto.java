@@ -1,51 +1,60 @@
 // Archivo: ObjetoLluviosoAbstracto.java
-
 package puppy.code;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
 /**
- * Clase padre abstracta para todos los ítems que caen (Gotas, Rocas, Escudos, etc.).
- * Define la lógica común de caída, límites y dibujo.
+ * Clase padre abstracta para todos los objetos que caen (Gotas, Rocas, Escudos, etc.).
  * (Cumple GM1.4)
  */
-public abstract class ObjetoLluviosoAbstracto {
+public abstract class ObjetoLluviosoAbstracto implements Desechable {
 
-    // Atributos protegidos para que las clases hijas puedan acceder
+    // ATRIBUTOS PROTECTED
     protected Rectangle limites;
-    protected Texture textura;
-    protected float velocidadCaida = 300.0F;
+    protected Texture textura; // Usaremos 'textura' aquí para compatibilidad con las subclases
+    protected float velocidad = 200; // Velocidad base
 
-    // El objeto constructor
-    public ObjetoLluviosoAbstracto(Texture textura, float posicionX) {
-        this.textura = textura;
-        this.limites = new Rectangle(posicionX, 480.0F, 64.0F, 64.0F);
+    // CONSTRUCTOR
+    public ObjetoLluviosoAbstracto(Texture tex, float posicionX) {
+        this.textura = tex;
+
+        // Inicializar límites (usando un tamaño fijo, por ejemplo, 48x48)
+        this.limites = new Rectangle();
+        this.limites.x = posicionX;
+        this.limites.y = 480; // Inicia arriba de la pantalla
+        this.limites.width = 48;
+        this.limites.height = 48;
     }
 
-    // MÉTODO ABSTRACTO (GM1.6): Ahora recibe el GestorNiveles para la penalización progresiva
+    // MÉTODO ABSTRACTO (El polimorfismo clave)
     public abstract void aplicarEfecto(ReceptorAbstracto receptor, GestorNiveles gestor);
 
-    // Lógica CONCRETA: Actualiza la posición del objeto (recibe factor de velocidad del GestorGotas)
+    // MÉTODO CONCRETO (Lógica de movimiento compartida)
     public void actualizar(float factorVelocidad) {
-        // Multiplicamos la velocidad base por el factor de dificultad del nivel
-        this.limites.y -= this.velocidadCaida * factorVelocidad * Gdx.graphics.getDeltaTime();
+        // Mover hacia abajo
+        this.limites.y -= this.velocidad * factorVelocidad * com.badlogic.gdx.Gdx.graphics.getDeltaTime();
     }
 
-    // Lógica CONCRETA: Dibuja el objeto
-    public void dibujar(SpriteBatch lote) {
-        lote.draw(this.textura, this.limites.x, this.limites.y);
+    // DIBUJO CONCRETO
+    public void dibujar(SpriteBatch batch) {
+        batch.draw(this.textura, this.limites.x, this.limites.y, this.limites.width, this.limites.height);
     }
 
-    // Getters
-    public Rectangle obtenerLimites() {
-        return limites;
-    }
-
-    // Check si el objeto ya salió de la pantalla
+    // UTILIDADES
     public boolean estaFueraDePantalla() {
-        return this.limites.y + 64.0F < 0.0F;
+        return this.limites.y + this.limites.height < 0;
+    }
+
+    public Rectangle obtenerLimites() {
+        return this.limites;
+    }
+
+    // IMPLEMENTACIÓN DESECHABLE (GM1.5)
+    // El GestorGotas maneja las texturas, por lo que este método queda vacío.
+    @Override
+    public void liberarRecursos() {
+        // No hace nada, el GestorGotas es el dueño de la textura
     }
 }

@@ -80,15 +80,19 @@ public abstract class ReceptorAbstracto implements Desechable {
         if(this.limites.x > 800 - 64) this.limites.x = 800 - 64;
     }
 
+
     public void dibujar(SpriteBatch batch) {
-        if (!herido) {
-            batch.draw(this.imagen, this.limites.x, this.limites.y);
-        } else {
-            // Animación de parpadeo/herido
-            batch.draw(this.imagen, this.limites.x, this.limites.y + MathUtils.random(-5,5));
-            this.tiempoHerido--;
-            if (this.tiempoHerido<=0) this.herido = false;
-        }
+        // Definimos un tamaño constante para el Receptor (64x64)
+        final float ANCHO = 64;
+        final float ALTO = 64;
+
+        batch.draw(
+            this.imagen, // <-- ¡CORREGIDO! Usar 'imagen' en lugar de 'textura'
+            this.limites.x,
+            this.limites.y,
+            ANCHO,
+            ALTO
+        );
     }
 
     // Getters y Setters
@@ -99,6 +103,6 @@ public abstract class ReceptorAbstracto implements Desechable {
 
     // Implementación de la interfaz Desechable (GM1.5)
     // Se deja abstracto aquí para que cada subclase decida si también debe liberar recursos
-    @Override
+
     public abstract void liberarRecursos();
 }

@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 /**
  * Gestor de los objetos que caen.
  * Actúa como el Contexto que utiliza el ObjetoLluviosoAbstracto. (Cumple GM1.4)
+ * IMPLEMENTA EL PATRÓN ABSTRACT FACTORY (GM2.4)
  */
 public class GestorGotas implements Desechable {
 
@@ -18,23 +19,27 @@ public class GestorGotas implements Desechable {
     private Array<ObjetoLluviosoAbstracto> objetosLluviosos;
 
     private long tiempoUltimaGota;
-    private Texture texturaGotaBuena;
-    private Texture texturaGotaMala;
     private Sound sonidoGota;
     private Music musicaLluvia;
 
-    // ATRIBUTOS NUEVOS PARA NIVELES > 1
-    private Texture texturaRoca;
-    private Texture texturaEscudo;
+    // TEXTURAS DEL NIVEL 1
+    private final Texture texturaGotaBuena;
+    private final Texture texturaGotaMala;
+
+    // TEXTURAS DEL NIVEL 2
+    private final Texture texturaRoca;
+    private final Texture texturaEscudo;
+
+    // NUEVO ATRIBUTO CLAVE: La Fábrica Abstracta que usamos para crear ítems (GM2.4)
+    private IFabricaObjetosLluviosos fabricaActual;
 
 
-    // CONSTRUCTOR: Ahora debe recibir las nuevas texturas
+    // CONSTRUCTOR: Recibe TODAS las texturas necesarias
     public GestorGotas(Texture texBuena, Texture texMala, Sound sonido, Music musica, Texture texRoca, Texture texEscudo) {
         this.musicaLluvia = musica;
         this.sonidoGota = sonido;
         this.texturaGotaBuena = texBuena;
         this.texturaGotaMala = texMala;
-        // Almacenar las nuevas texturas
         this.texturaRoca = texRoca;
         this.texturaEscudo = texEscudo;
     }
@@ -42,45 +47,23 @@ public class GestorGotas implements Desechable {
     // CREACIÓN
     public void crear() {
         this.objetosLluviosos = new Array<ObjetoLluviosoAbstracto>();
-        // NOTA: crearObjetoLluvioso() no se llama aquí, sino en actualizarMovimiento.
         this.musicaLluvia.setLooping(true);
         this.musicaLluvia.play();
     }
 
-    // LÓGICA DE FÁBRICA: Decide qué objeto crear basado en el nivel
-    private void crearObjetoLluvioso(GestorNiveles gestor) { // MÉTODO MODIFICADO: AHORA RECIBE EL GESTOR
+    // LÓGICA DE FÁBRICA: Usa la fábrica seleccionada para crear ítems (GM2.4)
+    private void crearObjetoLluvioso() {
         float posicionX = (float)MathUtils.random(0, 736);
-        int nivelActual = gestor.getNivelActual();
-
         ObjetoLluviosoAbstracto nuevoObjeto = null;
 
-        // LÓGICA DE CREACIÓN BASADA EN EL NIVEL
-        if (nivelActual == 1) {
-            // Nivel 1: Solo Gota Buena y Gota Mala (Probabilidad 70/30)
-            if (MathUtils.random(1, 10) < 3) {
-                nuevoObjeto = new GotaMala(this.texturaGotaMala, posicionX);
-            } else {
-                nuevoObjeto = new GotaBuena(this.texturaGotaBuena, posicionX);
-            }
-        } else if (nivelActual == 2) {
-            // Nivel 2: Introduce Roca y Escudo
-            int probabilidad = MathUtils.random(1, 10);
-
-            if (probabilidad < 2) {
-                // Roca (Daño Doble) - 10% de probabilidad
-                nuevoObjeto = new Roca(this.texturaRoca, posicionX);
-            } else if (probabilidad == 2) {
-                // Escudo (Bonificación) - 10% de probabilidad
-                nuevoObjeto = new Escudo(this.texturaEscudo, posicionX);
-            } else if (probabilidad < 5) {
-                // Gota Mala - 20% de probabilidad
-                nuevoObjeto = new GotaMala(this.texturaGotaMala, posicionX);
-            } else {
-                // Gota Buena - 60% de probabilidad
-                nuevoObjeto = new GotaBuena(this.texturaGotaBuena, posicionX);
-            }
+        // Probabilidad: 70% Bueno, 30% Malo (Esta lógica es constante para todos los niveles)
+        if (MathUtils.random(1, 10) < 3) {
+            // Usar la fábrica actual para crear el Objeto Malo del Nivel
+            nuevoObjeto = this.fabricaActual.crearObjetoMalo(posicionX);
+        } else {
+            // Usar la fábrica actual para crear el Objeto Bueno del Nivel
+            nuevoObjeto = this.fabricaActual.crearObjetoBueno(posicionX);
         }
-        // TODO: Implementar lógica para Nivel 3, 4, 5...
 
         // Añadir el objeto si se creó
         if (nuevoObjeto != null) {
@@ -93,12 +76,19 @@ public class GestorGotas implements Desechable {
     // ACTUALIZACIÓN DE MOVIMIENTO Y COLISIONES
     public void actualizarMovimiento(ReceptorAbstracto receptor, GestorNiveles gestorNiveles) {
 
-        float factorVelocidad = 1.0f + (gestorNiveles.getNivelActual() - 1) * 0.2f;
         int nivelActual = gestorNiveles.getNivelActual();
 
-        // Generar nueva gota: Aumenta la frecuencia de aparición con el nivel
+        // GM2.4: LÓGICA DEL ABSTRACT FACTORY: Elegir/Actualizar la fábrica
+        if (this.fabricaActual == null || !this.esFabricaCorrecta(nivelActual)) {
+            this.fabricaActual = this.seleccionarFabrica(nivelActual);
+        }
+
+        // GM1.7: Aplicar Factor de Velocidad basado en el Nivel
+        float factorVelocidad = 1.0f + (nivelActual - 1) * 0.2f;
+
+        // Generar nueva gota: Usa la fábrica seleccionada
         if (TimeUtils.nanoTime() - this.tiempoUltimaGota > 1000000000L / nivelActual) {
-            this.crearObjetoLluvioso(gestorNiveles); // LLAMADA CORREGIDA
+            this.crearObjetoLluvioso(); // Ya no necesita el gestor como parámetro
         }
 
         // Iterar y actualizar todos los objetos
@@ -128,6 +118,28 @@ public class GestorGotas implements Desechable {
             }
         }
     }
+
+    // MÉTODOS AUXILIARES PARA EL ABSTRACT FACTORY (GM2.4)
+    private boolean esFabricaCorrecta(int nivel) {
+        // Usa 'instanceof' para verificar el tipo de fábrica actual
+        if (nivel == 1) return this.fabricaActual instanceof FabricaNivel1;
+        if (nivel == 2) return this.fabricaActual instanceof FabricaNivel2;
+        // AGREGAR LÓGICA PARA NIVELES 3, 4 y 5
+        return false;
+    }
+
+    private IFabricaObjetosLluviosos seleccionarFabrica(int nivel) {
+        // Instancia la fábrica correcta basada en el nivel
+        switch (nivel) {
+            case 1:
+                return new FabricaNivel1(this.texturaGotaMala, this.texturaGotaBuena);
+            case 2:
+                return new FabricaNivel2(this.texturaRoca, this.texturaEscudo);
+            // AGREGAR CASES PARA NIVELES 3, 4, 5
+            default:
+                return new FabricaNivel1(this.texturaGotaMala, this.texturaGotaBuena);
+        }
+    }
     // ----------------------------------------------------------------------------------
 
     // DIBUJO POLIMÓRFICO
@@ -144,8 +156,8 @@ public class GestorGotas implements Desechable {
         this.musicaLluvia.dispose();
         this.texturaGotaBuena.dispose();
         this.texturaGotaMala.dispose();
-        // Liberar las nuevas texturas cargadas
         this.texturaRoca.dispose();
         this.texturaEscudo.dispose();
+        // AGREGAR dispose() PARA LAS TEXTURAS DE NIVELES 3, 4, 5
     }
 }
