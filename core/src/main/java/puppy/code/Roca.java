@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
  * Ítem de Nivel 2. Causa daño DOBLE.
  * Hereda de ObjetoLluviosoFactorizado.
  */
-public class Roca extends ObjetoLluviosoFactorizado {
+public class Roca extends ObjetoLluviosoAbstracto {
 
     public Roca(Texture textura, float posicionX) {
         super(textura, posicionX);

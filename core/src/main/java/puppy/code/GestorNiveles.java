@@ -15,7 +15,7 @@ public class GestorNiveles {
 
     private int nivelActual = 1;
     private final int MAX_NIVELES = 5;
-    private final int PUNTOS_POR_NIVEL = 500; // Puntos necesarios para avanzar
+    private final int PUNTOS_POR_NIVEL = 100; // Puntos necesarios para avanzar
 
     // Atributos de assets necesarios para crear los receptores
     private final Array<Texture> texturasReceptor;

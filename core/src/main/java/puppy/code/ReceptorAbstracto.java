@@ -27,6 +27,7 @@ public abstract class ReceptorAbstracto implements Desechable {
     protected boolean herido = false;
     protected int tiempoHeridoMax = 50;
     protected int tiempoHerido;
+    protected boolean tieneEscudo = false;
     // La penalización progresiva de puntos se implementará en dañar()
 
     public ReceptorAbstracto(Texture tex, Sound ss) {
@@ -41,6 +42,13 @@ public abstract class ReceptorAbstracto implements Desechable {
     // MÉTODOS CONCRETOS (Lógica compartida por todos los receptores)
 
     public void dañar(GestorNiveles gestor) {
+
+        if (this.tieneEscudo) {
+            this.tieneEscudo = false; // El escudo se gasta al recibir un golpe
+            // Reproducir sonido o efecto visual de escudo roto (OPCIONAL)
+            return; // ¡El daño es ignorado!
+        }
+
         if(this.vidas > 0) {
             --this.vidas;
 

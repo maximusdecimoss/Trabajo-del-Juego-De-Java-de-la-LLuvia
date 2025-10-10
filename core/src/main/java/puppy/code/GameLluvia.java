@@ -37,8 +37,12 @@ public class GameLluvia extends ApplicationAdapter {
     private Texture texturaVikingo;
 
     // ASSETS NUEVOS PARA NIVELES (Roca y Escudo)
-    private Texture texturaRoca; // NUEVO
-    private Texture texturaEscudo; // NUEVO
+    private Texture texturaRoca;
+    private Texture texturaEscudo;
+
+    // ¡NUEVOS ASSETS PARA NIVEL 3!
+    private Texture texturaGloboAgua; // NUEVO
+    private Texture texturaMoneda;    // NUEVO
 
 
     @Override
@@ -56,8 +60,12 @@ public class GameLluvia extends ApplicationAdapter {
         this.texturaVikingo = new Texture(Gdx.files.internal("vikingo.png"));
 
         // 3. CARGAR TEXTURAS NUEVAS PARA LOS NIVELES
-        this.texturaRoca = new Texture(Gdx.files.internal("roca.png")); // ¡ASUME roca.png!
-        this.texturaEscudo = new Texture(Gdx.files.internal("escudo.png")); // ¡ASUME escudo.png!
+        this.texturaRoca = new Texture(Gdx.files.internal("roca.png"));
+        this.texturaEscudo = new Texture(Gdx.files.internal("escudo.png"));
+
+        // ¡CARGAR TEXTURAS DEL NIVEL 3!
+        this.texturaGloboAgua = new Texture(Gdx.files.internal("globo_agua.png")); // Cambia el nombre si es diferente
+        this.texturaMoneda = new Texture(Gdx.files.internal("moneda.png"));       // Cambia el nombre si es diferente
 
         // 4. Cargar ASSETS de la Lluvia
         this.texturaGotaBuena = new Texture(Gdx.files.internal("drop.png"));
@@ -76,10 +84,11 @@ public class GameLluvia extends ApplicationAdapter {
         // 6. Inicializar Gestores
         this.gestorNiveles = new GestorNiveles(texturasReceptores, this.sonidoHerido);
 
-        // ¡PASAMOS LAS NUEVAS TEXTURAS AL CONSTRUCTOR DE GESTORGOTAS!
+        // ¡PASAMOS TODAS LAS TEXTURAS AL CONSTRUCTOR DE GESTORGOTAS!
         this.gestorGotas = new GestorGotas(
             this.texturaGotaBuena, this.texturaGotaMala, this.sonidoGota, this.musicaLluvia,
-            this.texturaRoca, this.texturaEscudo // TEXTURAS NUEVAS
+            this.texturaRoca, this.texturaEscudo, // Texturas de Nivel 2
+            this.texturaGloboAgua, this.texturaMoneda // ¡Texturas de Nivel 3!
         );
 
         // 7. El GestorNiveles crea el jugador INICIAL (Nivel 1)
@@ -111,8 +120,6 @@ public class GameLluvia extends ApplicationAdapter {
         if (!jugador.isGameOver()) {
 
             // 1. Verificar avance de nivel
-            // NOTA: Si el nivel cambia, el GestorNiveles internamente reemplaza el objeto jugador
-            // por un nuevo receptor (Paraguas, Persona, etc.)
             this.jugador = this.gestorNiveles.actualizarEstado(this.jugador.getPuntos(), this.jugador);
 
             // 2. Movimiento y colisiones
@@ -139,17 +146,30 @@ public class GameLluvia extends ApplicationAdapter {
         ((Desechable)this.gestorGotas).liberarRecursos();
 
         // 2. Llama al método DISPOSE() DIRECTO de LibGDX (Texturas que GameLluvia cargó)
+        // Libera las texturas de los 5 Receptores
+        this.texturaTarro.dispose(); // <-- ¡Asegúrate de liberar esta!
         this.texturaParaguas.dispose();
         this.texturaPersona.dispose();
         this.texturaPerro.dispose();
         this.texturaVikingo.dispose();
 
-        // LIBERACIÓN DE LAS NUEVAS TEXTURAS
+        // LIBERACIÓN DE LAS TEXTURAS DE LOS ÍTEMS (Nivel 2)
         this.texturaRoca.dispose();
         this.texturaEscudo.dispose();
+
+        // ¡LIBERACIÓN DE LAS TEXTURAS DEL NIVEL 3!
+        this.texturaGloboAgua.dispose();
+        this.texturaMoneda.dispose();
+
+        // Libera las texturas de las Gotas
+        this.texturaGotaBuena.dispose();
+        this.texturaGotaMala.dispose();
 
         // Libera los elementos que GameLluvia maneja directamente
         this.batch.dispose();
         this.font.dispose();
+
+        // Libera el sonido de herida
+        this.sonidoHerido.dispose();
     }
 }
