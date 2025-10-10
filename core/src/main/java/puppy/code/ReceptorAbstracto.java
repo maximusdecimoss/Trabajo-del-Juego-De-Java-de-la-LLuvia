@@ -17,36 +17,36 @@ import com.badlogic.gdx.math.Rectangle;
 public abstract class ReceptorAbstracto implements Desechable {
 
     // LÓGICA COMÚN QUE ERA DE TARRO
-    protected Rectangle limites; // Renombramos 'bucket' a 'limites' para abstracción
-    protected Texture imagen; // Renombramos 'bucketImage' a 'imagen'
+    protected Rectangle limites;
+    protected Texture imagen;
     protected Sound sonidoHerido;
 
     protected int vidas = 3;
     protected int puntos = 0;
-    protected int velx = 400;
+    protected int velx = 400; // La velocidad base del movimiento
     protected boolean herido = false;
     protected int tiempoHeridoMax = 50;
     protected int tiempoHerido;
     protected boolean tieneEscudo = false;
-    // La penalización progresiva de puntos se implementará en dañar()
+
+    // Nueva constante para el movimiento del jugador
+    protected final float VELOCIDAD_BASE = 400f;
 
     public ReceptorAbstracto(Texture tex, Sound ss) {
         this.imagen = tex;
         this.sonidoHerido = ss;
     }
 
-    // MÉTODOS ABSTRACTOS: Lo que cada receptor hace de forma única
-    // Aunque el movimiento y dibujo son similares, dejaremos el constructor/crear como abstracto.
-    public abstract void crear(); // Cada subclase define sus límites/posición inicial
+    // MÉTODOS ABSTRACTOS
+    public abstract void crear();
 
     // MÉTODOS CONCRETOS (Lógica compartida por todos los receptores)
 
     public void dañar(GestorNiveles gestor) {
 
         if (this.tieneEscudo) {
-            this.tieneEscudo = false; // El escudo se gasta al recibir un golpe
-            // Reproducir sonido o efecto visual de escudo roto (OPCIONAL)
-            return; // ¡El daño es ignorado!
+            this.tieneEscudo = false;
+            return; // El daño es ignorado
         }
 
         if(this.vidas > 0) {
@@ -56,7 +56,6 @@ public abstract class ReceptorAbstracto implements Desechable {
             int penalizacion = gestor.obtenerPenalizacionPorNivel();
             this.puntos -= penalizacion;
 
-            // Asegurarse de que los puntos no sean negativos (opcional)
             if (this.puntos < 0) {
                 this.puntos = 0;
             }
@@ -67,9 +66,12 @@ public abstract class ReceptorAbstracto implements Desechable {
         }
     }
 
+    // CORRECCIÓN: 'puntos' sí existe (declarado arriba).
+    // El comentario de error estaba en tu código fuente, no en la clase.
     public void setPuntos(int nuevosPuntos) {
-        this.puntos = nuevosPuntos; // ERROR: puntos no existe aquí
+        this.puntos = nuevosPuntos;
     }
+
     public boolean isGameOver() {
         return this.vidas <= 0;
     }
@@ -78,10 +80,23 @@ public abstract class ReceptorAbstracto implements Desechable {
         return herido;
     }
 
-    // Movimiento y lógica de invencibilidad (tomado de Tarro.java)
+    // MOVIMIENTO: Integración del Singleton (GM2.1)
     public void actualizarMovimiento() {
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) this.limites.x -= this.velx * Gdx.graphics.getDeltaTime();
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) this.limites.x += this.velx * Gdx.graphics.getDeltaTime();
+
+        // 1. Obtener el factor de velocidad del Singleton (Hueso/Lodo)
+        float factorSingleton = GestorTiempo.getInstancia().getFactorVelocidadGlobal();
+
+        // 2. Calcular la velocidad real (VELOCIDAD_BASE * factorSingleton)
+        float velocidadReal = VELOCIDAD_BASE * factorSingleton;
+
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            // Usa la velocidad real, que puede ser 0.5x, 1.0x o 1.5x la base
+            this.limites.x -= velocidadReal * Gdx.graphics.getDeltaTime();
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            // Usa la velocidad real
+            this.limites.x += velocidadReal * Gdx.graphics.getDeltaTime();
+        }
 
         // Que no se salga de los bordes izq y der (Lógica de 800x480)
         if(this.limites.x < 0) this.limites.x = 0;
@@ -90,12 +105,12 @@ public abstract class ReceptorAbstracto implements Desechable {
 
 
     public void dibujar(SpriteBatch batch) {
-        // Definimos un tamaño constante para el Receptor (64x64)
+        // ... (Tu lógica de dibujo sigue siendo correcta)
         final float ANCHO = 64;
         final float ALTO = 64;
 
         batch.draw(
-            this.imagen, // <-- ¡CORREGIDO! Usar 'imagen' en lugar de 'textura'
+            this.imagen,
             this.limites.x,
             this.limites.y,
             ANCHO,
@@ -108,9 +123,8 @@ public abstract class ReceptorAbstracto implements Desechable {
     public int getPuntos() { return this.puntos; }
     public Rectangle getArea() { return this.limites; }
     public void sumarPuntos(int pp) { this.puntos += pp; }
+    public void setTieneEscudo(boolean tieneEscudo) { this.tieneEscudo = tieneEscudo; } // Setter necesario para Escudo
 
     // Implementación de la interfaz Desechable (GM1.5)
-    // Se deja abstracto aquí para que cada subclase decida si también debe liberar recursos
-
     public abstract void liberarRecursos();
 }

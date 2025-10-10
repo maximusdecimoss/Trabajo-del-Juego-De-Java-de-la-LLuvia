@@ -41,8 +41,12 @@ public class GameLluvia extends ApplicationAdapter {
     private Texture texturaEscudo;
 
     // ¡NUEVOS ASSETS PARA NIVEL 3!
-    private Texture texturaGloboAgua; // NUEVO
-    private Texture texturaMoneda;    // NUEVO
+    private Texture texturaGloboAgua;
+    private Texture texturaMoneda;
+
+    // NUEVO ASSETs para nivel 4
+    private Texture texturaHueso;
+    private Texture texturaLodo;
 
 
     @Override
@@ -64,8 +68,12 @@ public class GameLluvia extends ApplicationAdapter {
         this.texturaEscudo = new Texture(Gdx.files.internal("escudo.png"));
 
         // ¡CARGAR TEXTURAS DEL NIVEL 3!
-        this.texturaGloboAgua = new Texture(Gdx.files.internal("globo_agua.png")); // Cambia el nombre si es diferente
-        this.texturaMoneda = new Texture(Gdx.files.internal("moneda.png"));       // Cambia el nombre si es diferente
+        this.texturaGloboAgua = new Texture(Gdx.files.internal("globo_agua.png"));
+        this.texturaMoneda = new Texture(Gdx.files.internal("moneda.png"));
+
+        // TExturas Nivel 4
+        this.texturaHueso = new Texture(Gdx.files.internal("hueso.png"));
+        this.texturaLodo = new Texture(Gdx.files.internal("lodo.png"));
 
         // 4. Cargar ASSETS de la Lluvia
         this.texturaGotaBuena = new Texture(Gdx.files.internal("drop.png"));
@@ -85,10 +93,12 @@ public class GameLluvia extends ApplicationAdapter {
         this.gestorNiveles = new GestorNiveles(texturasReceptores, this.sonidoHerido);
 
         // ¡PASAMOS TODAS LAS TEXTURAS AL CONSTRUCTOR DE GESTORGOTAS!
+        // CORRECCIÓN DE SINTAXIS: Se añadió la coma después de this.texturaMoneda
         this.gestorGotas = new GestorGotas(
             this.texturaGotaBuena, this.texturaGotaMala, this.sonidoGota, this.musicaLluvia,
             this.texturaRoca, this.texturaEscudo, // Texturas de Nivel 2
-            this.texturaGloboAgua, this.texturaMoneda // ¡Texturas de Nivel 3!
+            this.texturaGloboAgua, this.texturaMoneda, // ¡Texturas de Nivel 3!
+            this.texturaHueso,this.texturaLodo // ¡Texturas de Nivel 4!
         );
 
         // 7. El GestorNiveles crea el jugador INICIAL (Nivel 1)
@@ -119,10 +129,14 @@ public class GameLluvia extends ApplicationAdapter {
         // LÓGICA DE CONTROL DEL JUEGO
         if (!jugador.isGameOver()) {
 
-            // 1. Verificar avance de nivel
+            // 1. ¡PASO CRUCIAL DEL SINGLETON (GM2.1)!
+            // Actualiza el factor de velocidad global descontando el tiempo
+            GestorTiempo.getInstancia().actualizar(Gdx.graphics.getDeltaTime());
+
+            // 2. Verificar avance de nivel
             this.jugador = this.gestorNiveles.actualizarEstado(this.jugador.getPuntos(), this.jugador);
 
-            // 2. Movimiento y colisiones
+            // 3. Movimiento y colisiones
             jugador.actualizarMovimiento();
             gestorGotas.actualizarMovimiento(jugador, gestorNiveles);
 
@@ -147,7 +161,7 @@ public class GameLluvia extends ApplicationAdapter {
 
         // 2. Llama al método DISPOSE() DIRECTO de LibGDX (Texturas que GameLluvia cargó)
         // Libera las texturas de los 5 Receptores
-        this.texturaTarro.dispose(); // <-- ¡Asegúrate de liberar esta!
+        this.texturaTarro.dispose();
         this.texturaParaguas.dispose();
         this.texturaPersona.dispose();
         this.texturaPerro.dispose();
@@ -160,6 +174,10 @@ public class GameLluvia extends ApplicationAdapter {
         // ¡LIBERACIÓN DE LAS TEXTURAS DEL NIVEL 3!
         this.texturaGloboAgua.dispose();
         this.texturaMoneda.dispose();
+
+        // ¡LIBERACIÓN DE LAS TEXTURAS DEL NIVEL 4!
+        this.texturaHueso.dispose();
+        this.texturaLodo.dispose();
 
         // Libera las texturas de las Gotas
         this.texturaGotaBuena.dispose();

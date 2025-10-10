@@ -34,6 +34,10 @@ public class GestorGotas implements Desechable {
     private final Texture texturaGloboAgua;
     private final Texture texturaMoneda;
 
+    // Atributos de texturas de Nivel 4
+    private final Texture texturaLodo; // ¡NUEVO!
+    private final Texture texturaHueso; // ¡NUEVO!
+
     // NUEVO ATRIBUTO CLAVE: La Fábrica Abstracta que usamos para crear ítems (GM2.4)
     private IFabricaObjetosLluviosos fabricaActual;
 
@@ -41,17 +45,29 @@ public class GestorGotas implements Desechable {
     // CONSTRUCTOR: Recibe TODAS las texturas necesarias
     public GestorGotas(Texture texBuena, Texture texMala, Sound sonido, Music musica,
                        Texture texRoca, Texture texEscudo,
-                       Texture texGloboAgua, Texture texMoneda) { // <-- ¡Nuevos Parámetros!
-        this.musicaLluvia = musica;
-        this.sonidoGota = sonido;
+                       Texture texGloboAgua, Texture texMoneda,
+                       Texture texHueso, Texture texLodo) { // <-- ¡Ahora acepta 10 argumentos!
+
+        // Nivel 1
         this.texturaGotaBuena = texBuena;
         this.texturaGotaMala = texMala;
+        this.sonidoGota = sonido;
+        this.musicaLluvia = musica;
+
+        // Nivel 2
         this.texturaRoca = texRoca;
         this.texturaEscudo = texEscudo;
 
-        // Asignar nuevas texturas
+        // Nivel 3
         this.texturaGloboAgua = texGloboAgua;
         this.texturaMoneda = texMoneda;
+
+        // Nivel 4
+        this.texturaHueso = texHueso; // ¡Asignación!
+        this.texturaLodo = texLodo;   // ¡Asignación!
+
+        // Inicializa la lista de objetos
+        this.objetosLluviosos = new Array<>();
     }
 
     // CREACIÓN
@@ -141,7 +157,8 @@ public class GestorGotas implements Desechable {
         // Usa 'instanceof' para verificar el tipo de fábrica actual
         if (nivel == 1) return this.fabricaActual instanceof FabricaNivel1;
         if (nivel == 2) return this.fabricaActual instanceof FabricaNivel2;
-        if (nivel == 3) return this.fabricaActual instanceof FabricaNivel3; // <-- ¡NIVEL 3!
+        if (nivel == 3) return this.fabricaActual instanceof FabricaNivel3;
+        if (nivel == 4) return this.fabricaActual instanceof FabricaNivel4;// <-- ¡NIVEL 3!
         // AGREGAR LÓGICA PARA NIVELES 4 y 5
         return false;
     }
@@ -155,7 +172,10 @@ public class GestorGotas implements Desechable {
                 return new FabricaNivel2(this.texturaRoca, this.texturaEscudo);
             case 3:
                 return new FabricaNivel3(this.texturaGloboAgua, this.texturaMoneda); // ¡Añadir fábrica para nivel 3!
-            // TODO: Agregar casos para niveles 4 y 5 si tienen ítems específicos
+
+            case 4: // <-- ¡ESTE CASE DEBE EXISTIR Y USAR FabricaNivel4!
+                return new FabricaNivel4(this.texturaLodo, this.texturaHueso);
+
             default:
                 return new FabricaNivel1(this.texturaGotaMala, this.texturaGotaBuena);
         }
@@ -180,6 +200,7 @@ public class GestorGotas implements Desechable {
         this.texturaEscudo.dispose();
         this.texturaGloboAgua.dispose(); // ¡Añadir!
         this.texturaMoneda.dispose();
+
         // AGREGAR dispose() PARA LAS TEXTURAS DE NIVELES 3, 4, 5
     }
 }

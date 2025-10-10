@@ -4,7 +4,9 @@ drop.wav
 dropBad.png
 escudo.png
 globo_agua.png
+hueso.png
 hurt.ogg
+lodo.png
 moneda.png
 paraguas.png
 perro.png
