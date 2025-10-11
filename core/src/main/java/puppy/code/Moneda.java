@@ -14,6 +14,10 @@ public class Moneda extends ObjetoLluviosoAbstracto {
         super(textura, posicionX);
     }
 
+    protected void liberarRecursosUnicos() {
+        // No hay recursos únicos para liberar en esta clase.
+    }
+
     @Override
     public void aplicarEfecto(ReceptorAbstracto receptor, GestorNiveles gestor) {
         // La recompensa se basa en el nivel actual (GM1.7)

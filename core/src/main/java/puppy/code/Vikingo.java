@@ -34,8 +34,6 @@ public class Vikingo extends ReceptorAbstracto {
 
     // MÉTODO PARA USAR UNA POCIÓN (Lógica principal del Iterator)
     public boolean usarPocion() {
-        // El iterador ya tiene su propio control de 'tieneSiguiente()' interno en 'siguiente()'.
-
         // Llamamos al método que marca la poción como consumida y avanza.
         Object resultado = iteradorPociones.siguiente();
 
@@ -43,20 +41,34 @@ public class Vikingo extends ReceptorAbstracto {
             // Si el iterador devolvió 'true', significa que se consumió una poción fresca.
             this.vidas += 1; // Le da 1 vida extra al Vikingo
             this.pocionesRestantes--; // Actualiza el contador visible
-            // Podrías añadir lógica de sonido de curación aquí.
             return true;
         }
         return false; // No quedan más pociones o el iterador ya terminó.
+    }
+
+    // MÉTODOS DEL PATRÓN STRATEGY (GM2.3): Cambian el modo de sumar puntos
+
+    // Activa la Estrategia de doble puntuación (Modo Furia/Power-up)
+    public void activarFuria() {
+        // Hereda de ReceptorAbstracto. Cambia el comportamiento de sumar puntos.
+        this.setEstrategiaRecoleccion(new EstrategiaDoblePunto());
+    }
+
+    // Vuelve a la Estrategia normal
+    public void desactivarFuria() {
+        this.setEstrategiaRecoleccion(new EstrategiaNormal());
     }
 
     // Getter para el HUD
     public int getPocionesRestantes() {
         return this.pocionesRestantes;
     }
+    protected void liberarRecursosUnicos() {
+        // No hay recursos únicos para liberar en esta clase.
+    }
 
     @Override
     public void liberarRecursos() {
-        // IMPORTANTE: NO liberar imagen/sonido. LibGDX los gestiona en GameLluvia.dispose().
-        // Si el Vikingo tuviera sus propios recursos únicos (ej. textura de hacha), se liberarían aquí.
+        // Implementación de la interfaz Desechable
     }
 }

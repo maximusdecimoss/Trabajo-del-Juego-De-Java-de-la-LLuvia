@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 /**
  * Clase padre abstracta para todos los objetos que caen (Gotas, Rocas, Escudos, etc.).
- * (Cumple GM1.4)
+ * Implementa el Patrón Template Method (GM2.2) para el proceso de destrucción.
  */
 public abstract class ObjetoLluviosoAbstracto implements Desechable {
 
@@ -27,6 +27,29 @@ public abstract class ObjetoLluviosoAbstracto implements Desechable {
         this.limites.width = 48;
         this.limites.height = 48;
     }
+
+    // MÉTODO ABSTRACTO (El paso variable del Template Method)
+    /**
+     * Paso abstracto del Template Method: Las subclases implementan la liberación
+     * de recursos que SOLO ellas poseen (ej. sonidos o texturas no compartidas).
+     */
+    protected abstract void liberarRecursosUnicos();
+
+    // TEMPLATE METHOD (GM2.2): Esqueleto del algoritmo de destrucción
+    /**
+     * Define la secuencia final para eliminar un objeto del juego.
+     * Es 'final' para que las subclases no puedan modificar la estructura del algoritmo.
+     */
+    public final void destruir() {
+        // PASO 1: Limpieza del estado del objeto (Paso Fijo)
+        this.limites = null;
+
+        // PASO 2: Liberación de recursos únicos de la subclase (Paso Variable)
+        this.liberarRecursosUnicos();
+
+        // El paso de eliminación de la lista de GestorGotas se mantiene allí.
+    }
+
 
     // MÉTODO ABSTRACTO (El polimorfismo clave)
     public abstract void aplicarEfecto(ReceptorAbstracto receptor, GestorNiveles gestor);
@@ -52,9 +75,10 @@ public abstract class ObjetoLluviosoAbstracto implements Desechable {
     }
 
     // IMPLEMENTACIÓN DESECHABLE (GM1.5)
-    // El GestorGotas maneja las texturas, por lo que este método queda vacío.
+    // Este método ya no es necesario ya que usamos destruir() como template,
+    // pero lo dejamos vacío para mantener la compatibilidad con Desechable.
     @Override
     public void liberarRecursos() {
-        // No hace nada, el GestorGotas es el dueño de la textura
+        // La lógica de liberación se movió al Template Method: destruir()
     }
 }

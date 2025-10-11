@@ -27,6 +27,11 @@ public class Roca extends ObjetoLluviosoAbstracto {
             receptor.sumarPuntos(receptor.getPuntos() * -1);
         }
     }
+
+    @Override
+    protected void liberarRecursosUnicos() {
+        // No hay recursos únicos para liberar en esta clase.
+    }
 }
 
 

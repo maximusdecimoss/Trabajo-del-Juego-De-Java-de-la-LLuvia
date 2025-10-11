@@ -21,4 +21,7 @@ public class Hueso extends ObjetoLluviosoAbstracto {
         // Aumenta la velocidad un 50% (factor 1.5f) por 3 segundos.
         GestorTiempo.getInstancia().aplicarEfectoTemporal(1.5f, 3.0f);
     }
+    protected void liberarRecursosUnicos() {
+        // No hay recursos únicos para liberar en esta clase.
+    }
 }

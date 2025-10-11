@@ -17,4 +17,8 @@ public class GotaMala extends ObjetoLluviosoAbstracto {
         // la penalización progresiva (GM1.7: restar Nivel*10 puntos).
         receptor.dañar(gestor);
     }
+
+    protected void liberarRecursosUnicos() {
+        // No hay recursos únicos para liberar en esta clase.
+    }
 }

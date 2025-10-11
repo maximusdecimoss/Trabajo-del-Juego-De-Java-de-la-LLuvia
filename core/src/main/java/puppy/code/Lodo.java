@@ -19,4 +19,8 @@ public class Lodo extends ObjetoLluviosoAbstracto {
         // Ralentiza un 50% (factor 0.5f) por 5 segundos.
         GestorTiempo.getInstancia().aplicarEfectoTemporal(0.5f, 5.0f);
     }
+
+    protected void liberarRecursosUnicos() {
+        // No hay recursos únicos para liberar en esta clase.
+    }
 }

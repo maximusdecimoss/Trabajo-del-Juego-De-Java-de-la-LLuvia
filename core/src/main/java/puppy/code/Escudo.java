@@ -29,4 +29,9 @@ public class Escudo extends ObjetoLluviosoAbstracto {
         //     receptor.setVidas(receptor.getVidas() + 1);
         // }
     }
+
+    @Override
+    protected void liberarRecursosUnicos() {
+        // ¡VACÍO! La textura (this.textura) pertenece a GestorGotas, no a esta gota.
+    }
 }

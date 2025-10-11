@@ -16,6 +16,9 @@ import com.badlogic.gdx.math.Rectangle;
  */
 public abstract class ReceptorAbstracto implements Desechable {
 
+    // PATRÓN STRATEGY (GM2.3) - Atributo del Contexto
+    protected IEstrategiaRecoleccion estrategiaRecoleccion;
+
     // LÓGICA COMÚN QUE ERA DE TARRO
     protected Rectangle limites;
     protected Texture imagen;
@@ -35,6 +38,12 @@ public abstract class ReceptorAbstracto implements Desechable {
     public ReceptorAbstracto(Texture tex, Sound ss) {
         this.imagen = tex;
         this.sonidoHerido = ss;
+
+        // Inicialización del Strategy: Usa la estrategia por defecto
+        this.estrategiaRecoleccion = new EstrategiaNormal();
+    }
+    public void setPuntos(int nuevosPuntos) {
+        this.puntos = nuevosPuntos;
     }
 
     // MÉTODOS ABSTRACTOS
@@ -66,19 +75,7 @@ public abstract class ReceptorAbstracto implements Desechable {
         }
     }
 
-    // CORRECCIÓN: 'puntos' sí existe (declarado arriba).
-    // El comentario de error estaba en tu código fuente, no en la clase.
-    public void setPuntos(int nuevosPuntos) {
-        this.puntos = nuevosPuntos;
-    }
-
-    public boolean isGameOver() {
-        return this.vidas <= 0;
-    }
-
-    public boolean estaHerido() {
-        return herido;
-    }
+    // ... (setPuntos, isGameOver, estaHerido, etc. se mantienen)
 
     // MOVIMIENTO: Integración del Singleton (GM2.1)
     public void actualizarMovimiento() {
@@ -90,11 +87,9 @@ public abstract class ReceptorAbstracto implements Desechable {
         float velocidadReal = VELOCIDAD_BASE * factorSingleton;
 
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            // Usa la velocidad real, que puede ser 0.5x, 1.0x o 1.5x la base
             this.limites.x -= velocidadReal * Gdx.graphics.getDeltaTime();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            // Usa la velocidad real
             this.limites.x += velocidadReal * Gdx.graphics.getDeltaTime();
         }
 
@@ -105,7 +100,7 @@ public abstract class ReceptorAbstracto implements Desechable {
 
 
     public void dibujar(SpriteBatch batch) {
-        // ... (Tu lógica de dibujo sigue siendo correcta)
+        // ... (Tu lógica de dibujo)
         final float ANCHO = 64;
         final float ALTO = 64;
 
@@ -118,12 +113,29 @@ public abstract class ReceptorAbstracto implements Desechable {
         );
     }
 
+    public boolean isGameOver() {
+        // La condición para el fin del juego es que las vidas sean cero o menos
+        return this.vidas <= 0;
+    }
+
     // Getters y Setters
     public int getVidas() { return this.vidas; }
     public int getPuntos() { return this.puntos; }
     public Rectangle getArea() { return this.limites; }
-    public void sumarPuntos(int pp) { this.puntos += pp; }
-    public void setTieneEscudo(boolean tieneEscudo) { this.tieneEscudo = tieneEscudo; } // Setter necesario para Escudo
+
+    // MÉTODO MODIFICADO (GM2.3): Usa la Estrategia para sumar puntos
+    public void sumarPuntos(int puntajeBase) {
+        // La estrategia calcula el puntaje final (1x, 2x, etc.)
+        int puntosASumar = this.estrategiaRecoleccion.sumarPuntos(puntajeBase);
+        this.puntos += puntosASumar;
+    }
+
+    // Nuevo Método (GM2.3): Permite cambiar la Estrategia en tiempo de ejecución
+    public void setEstrategiaRecoleccion(IEstrategiaRecoleccion nuevaEstrategia) {
+        this.estrategiaRecoleccion = nuevaEstrategia;
+    }
+
+    public void setTieneEscudo(boolean tieneEscudo) { this.tieneEscudo = tieneEscudo; }
 
     // Implementación de la interfaz Desechable (GM1.5)
     public abstract void liberarRecursos();
