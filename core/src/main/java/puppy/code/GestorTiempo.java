@@ -1,21 +1,25 @@
-// Archivo: GestorTiempo.java
 package puppy.code;
 
+/**
+ * Implementa el Patrón Singleton (GM2.1) para gestionar el tiempo y la velocidad
+ * de todos los objetos en el juego.
+ */
 public class GestorTiempo {
 
-    // 1. Instancia Única y Privada (Singleton)
+    // 1. INSTANCIA ÚNICA (Singleton)
     private static final GestorTiempo INSTANCIA = new GestorTiempo();
 
     // ATRIBUTOS
-    private float factorVelocidadGlobal = 1.0f; // 1.0 = velocidad normal
-    private float tiempoRestanteEfecto = 0.0f;  // Contador de duración de efectos
+    // Se usa 'Global' para coincidir con el método que usan las otras clases.
+    private float factorVelocidadGlobal = 1.0f;
+    private float tiempoRestanteEfecto = 0.0f;
 
-    // 2. Constructor Privado: No se puede crear con 'new' desde fuera.
+    // 2. CONSTRUCTOR PRIVADO
     private GestorTiempo() {
-        // Nada aquí
+        // Inicialización simple
     }
 
-    // 3. Método de Acceso Global: Única forma de obtener la instancia.
+    // 3. ACCESO PÚBLICO A LA INSTANCIA (Punto de acceso global)
     public static GestorTiempo getInstancia() {
         return INSTANCIA;
     }
@@ -33,7 +37,10 @@ public class GestorTiempo {
     }
 
     // MÉTODOS PÚBLICOS
-    public float getFactorVelocidadGlobal() {
+    /**
+     * Devuelve el factor de velocidad actual que aplica a todos los objetos.
+     */
+    public float getFactorVelocidadGlobal() { // <--- NOMBRE CORREGIDO
         return factorVelocidadGlobal;
     }
 

@@ -1,37 +1,50 @@
 package puppy.code;
 
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 
-// IMPORTS NECESARIOS PARA PODER INSTANCIAR LOS PERSONAJES
+// ¡CORRECCIÓN CRÍTICA DE IMPORTS!
+// Asegúrate de que las rutas de los receptores sean correctas si están en un subpaquete.
+// Asumo que todos están en el paquete principal 'puppy.code'.
+import puppy.code.ReceptorAbstracto;
+import puppy.code.Desechable;
+import puppy.code.Tarro;
+import puppy.code.Paraguas;
+import puppy.code.Persona;
+import puppy.code.Perro;
+import puppy.code.Vikingo;
 
 
 /**
  * Gestiona el estado del juego, el nivel actual y proporciona la lógica para
- * la penalización progresiva (GM1.7).
+ * la penalización progresiva (GM1.7) y la victoria (15,000 puntos).
  */
 public class GestorNiveles {
 
     private int nivelActual = 1;
     private final int MAX_NIVELES = 5;
-    private final int PUNTOS_POR_NIVEL = 100; // Puntos necesarios para avanzar
+    private final int PUNTOS_POR_NIVEL = 100;
+    private final int META_PUNTOS_TOTAL = 15000; // Constante de Victoria
 
     // Atributos de assets necesarios para crear los receptores
     private final Array<Texture> texturasReceptor;
     private final Sound sonidoHerido;
 
-    // El receptor actual, se usa internamente para la lógica
-    private ReceptorAbstracto receptorActual;
 
-    // Constructor: Recibe todos los assets de los 5 receptores
     public GestorNiveles(Array<Texture> texturas, Sound sonidoHerido) {
         this.texturasReceptor = texturas;
         this.sonidoHerido = sonidoHerido;
     }
 
-    // MÉTODO MODIFICADO (Ahora recibe y devuelve el receptor para permitir el cambio de personaje)
+    // MÉTODO ACTUALIZADO: Maneja la lógica de avance y victoria
     public ReceptorAbstracto actualizarEstado(int puntosActuales, ReceptorAbstracto jugadorActual) {
+
+        // Si ya ganó, devolvemos el jugador sin hacer nada más.
+        if (ganoJuego(puntosActuales)) {
+            return jugadorActual;
+        }
 
         int nivelAnterior = this.nivelActual;
 
@@ -46,65 +59,65 @@ public class GestorNiveles {
             ((Desechable)jugadorActual).liberarRecursos();
 
             // Crear el nuevo receptor para el nuevo nivel
-            this.receptorActual = this.crearReceptor(this.nivelActual);
+            ReceptorAbstracto nuevoReceptor = this.crearReceptor(this.nivelActual);
 
-            // El nuevo receptor mantiene el puntaje del anterior
-            this.receptorActual.setPuntos(puntosActuales);
+            // Transferir el puntaje y vidas al nuevo receptor
+            nuevoReceptor.setPuntos(puntosActuales);
+            nuevoReceptor.setVidas(jugadorActual.getVidas()); // Se asume que setVidas existe
 
-            // Retornar el nuevo receptor
-            return this.receptorActual;
+            return nuevoReceptor;
         }
 
-        // Si el nivel NO cambió, retornamos el mismo receptor
         return jugadorActual;
     }
 
     private void avanzarNivel() {
         if (this.nivelActual < MAX_NIVELES) {
             this.nivelActual++;
-            // TODO: Agregar efecto de sonido/música de avance de nivel
         }
     }
 
-    // LÓGICA DE INSTANCIACIÓN DE RECEPTORES (Fábrica de Receptores)
+    // LÓGICA DE INSTANCIACIÓN DE RECEPTORES (Factory Method Pattern)
     public ReceptorAbstracto crearReceptor(int nivel) {
-        Texture texturaNivel = texturasReceptor.get(nivel - 1); // Array index = nivel - 1
+        Texture texturaNivel = texturasReceptor.get(nivel - 1);
+
+        ReceptorAbstracto nuevoReceptor;
 
         switch (nivel) {
             case 1:
-                // Tarro: El receptor base, vida normal, velocidad normal
-                this.receptorActual = new Tarro(texturaNivel, this.sonidoHerido);
+                nuevoReceptor = new Tarro(texturaNivel, this.sonidoHerido);
                 break;
             case 2:
-                // Paraguas: Puede tener más velocidad o menos vida
-                this.receptorActual = new Paraguas(texturaNivel, this.sonidoHerido);
+                nuevoReceptor = new Paraguas(texturaNivel, this.sonidoHerido);
                 break;
             case 3:
-                // Persona: Podría tener atributos neutros o dificultad media
-                this.receptorActual = new Persona(texturaNivel, this.sonidoHerido);
+                nuevoReceptor = new Persona(texturaNivel, this.sonidoHerido);
                 break;
             case 4:
-                // Perro: Podría ser más rápido pero tener menos vidas
-                this.receptorActual = new Perro(texturaNivel, this.sonidoHerido);
+                nuevoReceptor = new Perro(texturaNivel, this.sonidoHerido);
                 break;
             case 5:
-                // Vikingo: El más resistente, pero quizás más lento
-                this.receptorActual = new Vikingo(texturaNivel, this.sonidoHerido);
+                nuevoReceptor = new Vikingo(texturaNivel, this.sonidoHerido);
                 break;
             default:
-                this.receptorActual = new Tarro(texturasReceptor.get(0), this.sonidoHerido);
+                nuevoReceptor = new Tarro(this.texturasReceptor.get(0), this.sonidoHerido);
+                break; // Asegúrate que el break está aquí para evitar fallos
         }
-        this.receptorActual.crear();
-        return this.receptorActual;
+
+        nuevoReceptor.crear();
+        return nuevoReceptor;
     }
 
     // Getters
     public int getNivelActual() { return nivelActual; }
 
     // GM1.7: Penalización Progresiva
-    // Define cuántos puntos restar por daño basado en el nivel
     public int obtenerPenalizacionPorNivel() {
-        // Penalización: Nivel 1 resta 10, Nivel 5 resta 50 (Nivel * 10)
         return this.nivelActual * 10;
+    }
+
+    // Verifica la condición de victoria
+    public boolean ganoJuego(int puntosActuales) {
+        return puntosActuales >= META_PUNTOS_TOTAL;
     }
 }

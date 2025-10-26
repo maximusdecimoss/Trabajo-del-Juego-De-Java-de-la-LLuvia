@@ -2,62 +2,60 @@
 package puppy.code;
 
 /**
- * Clase que contiene y gestiona la colección de pociones de vida (Suministros).
- * Implementa IContenedorSuministros para devolver un objeto Iterator (GM2.2).
+ * Contenedor de las pociones de vida del Vikingo.
+ * Implementa IContenedorSuministros y define la lógica de la navegación interna.
  */
 public class ContenedorPociones implements IContenedorSuministros {
 
-    // El suministro del Vikingo: 3 pociones (true = poción disponible)
+    // El suministro del Vikingo: 3 pociones disponibles (true = disponible)
     private final boolean[] pociones = {true, true, true};
     private final int MAX_POCIONES = 3;
 
-    public int getCantidadMaxima() {
-        return MAX_POCIONES;
+    // Constructor vacío (no necesario, pero buena práctica)
+    public ContenedorPociones() {
+        // Inicialización
     }
 
     /**
-     * Devuelve la implementación específica de IIteradorSuministros.
+     * Devuelve la implementación específica de IIteradorSuministros (el iterador real).
      */
     @Override
     public IIteradorSuministros crearIterador() {
-        // Devuelve una nueva instancia del iterador interno
         return new IteradorPociones();
     }
 
     /**
-     * Clase interna privada que implementa la lógica del iterador.
-     * Es la responsable de la navegación.
+     * Clase interna que implementa la lógica del iterador (GM2.2).
      */
     private class IteradorPociones implements IIteradorSuministros {
 
-        private int indiceActual = 0; // Inicia en la primera poción
+        private int indiceActual = 0; // Índice de la próxima poción a verificar
 
         @Override
         public boolean tieneSiguiente() {
-            // Revisa si el índice está dentro de los límites del array de pociones
+            // Verifica si el índice aún está dentro de los límites del array
             return indiceActual < MAX_POCIONES;
         }
 
         @Override
         public Object siguiente() {
-            // Solo avanza y consume si hay un siguiente elemento
             if (this.tieneSiguiente()) {
 
-                // 1. Obtener el valor actual (true o false)
+                // 1. Verificar si la poción en el índice actual está disponible
                 boolean pocionDisponible = pociones[indiceActual];
 
-                // 2. Marcar la poción como USADA (la lógica de "consumo" se hace aquí)
+                // 2. Si estaba disponible, la marcamos como USADA (false)
                 if (pocionDisponible) {
                     pociones[indiceActual] = false;
                 }
 
-                // 3. Avanzar al siguiente índice (la "tarjeta de visita" se mueve)
+                // 3. Avanzar al siguiente índice
                 indiceActual++;
 
-                // 4. Devolver un marcador de la acción
-                return pocionDisponible; // Devuelve TRUE si se consumió, FALSE si ya estaba usada
+                // 4. Devolver el estado de la poción consumida (true si fue útil, false si ya estaba usada)
+                return pocionDisponible;
             }
-            return null; // Si no hay más, devuelve nulo.
+            return null; // No quedan más pociones
         }
     }
 }

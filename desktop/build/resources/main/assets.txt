@@ -7,10 +7,12 @@ globo_agua.png
 hueso.png
 hurt.ogg
 lodo.png
+meteoro.png
 moneda.png
 paraguas.png
 perro.png
 persona.png
+pocion.png
 rain.mp3
 roca.png
 vikingo.png

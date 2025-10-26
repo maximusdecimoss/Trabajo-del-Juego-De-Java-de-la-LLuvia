@@ -11,6 +11,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+// IMPORTACIONES NECESARIAS PARA LA LÓGICA DE NIVELES AVANZADA
+import com.badlogic.gdx.Input; // Para usar Input.Keys.SPACE, F
+import puppy.code.GestorTiempo; // Para el Singleton (GM2.1)
+import puppy.code.EstrategiaDoblePunto; // Para el Strategy (GM2.3)
+import puppy.code.EstrategiaNormal; // Para el Strategy (GM2.3)
+import puppy.code.Vikingo; // Necesario para castear al jugador en Nivel 5
+
 public class GameLluvia extends ApplicationAdapter {
     private OrthographicCamera camera;
     private SpriteBatch batch;
@@ -48,6 +55,10 @@ public class GameLluvia extends ApplicationAdapter {
     private Texture texturaHueso;
     private Texture texturaLodo;
 
+    // NUEVO ASSETs para nivel 5
+    private Texture texturaMeteoro;
+    private Texture texturaPocion;
+
 
     @Override
     public void create () {
@@ -63,23 +74,22 @@ public class GameLluvia extends ApplicationAdapter {
         this.texturaPerro = new Texture(Gdx.files.internal("perro.png"));
         this.texturaVikingo = new Texture(Gdx.files.internal("vikingo.png"));
 
-        // 3. CARGAR TEXTURAS NUEVAS PARA LOS NIVELES
+        // 3. CARGAR TEXTURAS DE ÍTEMS DE NIVEL 2-5
         this.texturaRoca = new Texture(Gdx.files.internal("roca.png"));
         this.texturaEscudo = new Texture(Gdx.files.internal("escudo.png"));
-
-        // ¡CARGAR TEXTURAS DEL NIVEL 3!
         this.texturaGloboAgua = new Texture(Gdx.files.internal("globo_agua.png"));
         this.texturaMoneda = new Texture(Gdx.files.internal("moneda.png"));
-
-        // TExturas Nivel 4
         this.texturaHueso = new Texture(Gdx.files.internal("hueso.png"));
         this.texturaLodo = new Texture(Gdx.files.internal("lodo.png"));
+        this.texturaMeteoro = new Texture(Gdx.files.internal("meteoro.png")); // Nivel 5
+        this.texturaPocion = new Texture(Gdx.files.internal("pocion.png"));   // Nivel 5
 
         // 4. Cargar ASSETS de la Lluvia
         this.texturaGotaBuena = new Texture(Gdx.files.internal("drop.png"));
         this.texturaGotaMala = new Texture(Gdx.files.internal("dropBad.png"));
         this.sonidoGota = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
         this.musicaLluvia = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
+
 
         // 5. Crear el Array de Texturas para el Gestor de Niveles
         Array<Texture> texturasReceptores = new Array<>();
@@ -93,12 +103,12 @@ public class GameLluvia extends ApplicationAdapter {
         this.gestorNiveles = new GestorNiveles(texturasReceptores, this.sonidoHerido);
 
         // ¡PASAMOS TODAS LAS TEXTURAS AL CONSTRUCTOR DE GESTORGOTAS!
-        // CORRECCIÓN DE SINTAXIS: Se añadió la coma después de this.texturaMoneda
         this.gestorGotas = new GestorGotas(
             this.texturaGotaBuena, this.texturaGotaMala, this.sonidoGota, this.musicaLluvia,
-            this.texturaRoca, this.texturaEscudo, // Texturas de Nivel 2
-            this.texturaGloboAgua, this.texturaMoneda, // ¡Texturas de Nivel 3!
-            this.texturaHueso,this.texturaLodo // ¡Texturas de Nivel 4!
+            this.texturaRoca, this.texturaEscudo,
+            this.texturaGloboAgua, this.texturaMoneda,
+            this.texturaHueso,this.texturaLodo,
+            this.texturaMeteoro, this.texturaPocion // ¡Texturas de Nivel 5!
         );
 
         // 7. El GestorNiveles crea el jugador INICIAL (Nivel 1)
@@ -140,6 +150,31 @@ public class GameLluvia extends ApplicationAdapter {
             jugador.actualizarMovimiento();
             gestorGotas.actualizarMovimiento(jugador, gestorNiveles);
 
+            // 4. INTEGRACIÓN DE HABILIDADES DEL VIKINGO (NIVEL 5)
+            if (gestorNiveles.getNivelActual() == 5) {
+
+                // Castear el ReceptorAbstracto al tipo Vikingo para acceder a sus métodos únicos
+                Vikingo vikingo = (Vikingo) jugador;
+
+                // ITERATOR (GM2.2): Usar poción con la tecla ESPACIO
+                if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                    vikingo.usarPocion();
+                }
+
+                // STRATEGY (GM2.3): Alternar Furia con la tecla F
+                if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+                    if (vikingo.estrategiaRecoleccion instanceof EstrategiaNormal) {
+                        vikingo.activarFuria();
+                    } else {
+                        vikingo.desactivarFuria();
+                    }
+                }
+
+                // Mostrar pociones restantes en el HUD
+                font.draw(batch, "Pociones: " + vikingo.getPocionesRestantes(), 10, 440);
+            }
+
+
         } else {
             // Lógica de Game Over
             font.draw(batch, "GAME OVER", 350, 240);
@@ -179,7 +214,12 @@ public class GameLluvia extends ApplicationAdapter {
         this.texturaHueso.dispose();
         this.texturaLodo.dispose();
 
-        // Libera las texturas de las Gotas
+        // ¡LIBERACIÓN DE LAS TEXTURAS DEL NIVEL 5!
+        this.texturaMeteoro.dispose();
+        this.texturaPocion.dispose();
+
+
+        // Libera las texturas de las Gotas (base)
         this.texturaGotaBuena.dispose();
         this.texturaGotaMala.dispose();
 

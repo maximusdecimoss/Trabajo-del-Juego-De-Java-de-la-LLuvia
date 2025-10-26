@@ -1,4 +1,3 @@
-// Archivo: ReceptorAbstracto.java
 package puppy.code;
 
 import com.badlogic.gdx.Gdx;
@@ -42,8 +41,21 @@ public abstract class ReceptorAbstracto implements Desechable {
         // Inicialización del Strategy: Usa la estrategia por defecto
         this.estrategiaRecoleccion = new EstrategiaNormal();
     }
+
+    // **********************************************
+    // MÉTODOS DE LA LÓGICA DE TRANSFERENCIA Y CREACIÓN
+    // **********************************************
+
     public void setPuntos(int nuevosPuntos) {
         this.puntos = nuevosPuntos;
+    }
+
+    // ¡MÉTODO AÑADIDO PARA LA CORRECCIÓN!
+    /**
+     * Settea el número de vidas. Usado por GestorNiveles para transferir el progreso.
+     */
+    public void setVidas(int nuevasVidas) {
+        this.vidas = nuevasVidas;
     }
 
     // MÉTODOS ABSTRACTOS
@@ -75,7 +87,14 @@ public abstract class ReceptorAbstracto implements Desechable {
         }
     }
 
-    // ... (setPuntos, isGameOver, estaHerido, etc. se mantienen)
+    public boolean isGameOver() {
+        // La condición para el fin del juego es que las vidas sean cero o menos
+        return this.vidas <= 0;
+    }
+
+    public boolean estaHerido() {
+        return herido;
+    }
 
     // MOVIMIENTO: Integración del Singleton (GM2.1)
     public void actualizarMovimiento() {
@@ -111,11 +130,6 @@ public abstract class ReceptorAbstracto implements Desechable {
             ANCHO,
             ALTO
         );
-    }
-
-    public boolean isGameOver() {
-        // La condición para el fin del juego es que las vidas sean cero o menos
-        return this.vidas <= 0;
     }
 
     // Getters y Setters
