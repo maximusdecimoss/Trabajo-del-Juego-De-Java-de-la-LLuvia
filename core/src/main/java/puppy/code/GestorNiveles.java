@@ -4,133 +4,67 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 
-// IMPORTS NECESARIOS PARA PODER INSTANCIAR LOS PERSONAJES
-import puppy.code.ReceptorAbstracto;
-import puppy.code.Desechable;
-import puppy.code.Tarro;
-import puppy.code.Paraguas;
-import puppy.code.Persona;
-import puppy.code.Perro;
-import puppy.code.Vikingo;
-
-
-/**
- * Gestiona el estado del juego, el nivel actual y proporciona la lógica para
- * la penalización progresiva (GM1.7) y la victoria (15,000 puntos).
- */
 public class GestorNiveles {
-
-    private int nivelActual = 1;
-    private final int MAX_NIVELES = 5;
-
-    // TABLA DE METAS FIJAS: Puntos necesarios para ENTRAR al siguiente nivel.
-    // Índice 0: Meta para Nivel 2 (150)
-    // Índice 1: Meta para Nivel 3 (1000)
-    // Índice 2: Meta para Nivel 4 (5000)
-    // Índice 3: Meta para Nivel 5 (10000)
-    private final int[] METAS_NIVEL = {150, 1000, 5000, 10000};
-
-    // CONDICIÓN DE VICTORIA FINAL
-    private final int META_PUNTOS_TOTAL = 15000;
-
-    // Atributos de assets necesarios para crear los receptores
-    private final Array<Texture> texturasReceptor;
+    private final Array<Texture> texturasReceptores;
     private final Sound sonidoHerido;
+    private int nivelActual = 1;
 
+    // Umbrales de puntos para cada nivel
+    private static final int[] UMBRALES_NIVEL = {0, 30, 250, 600, 1000};
 
     public GestorNiveles(Array<Texture> texturas, Sound sonidoHerido) {
-        this.texturasReceptor = texturas;
+        this.texturasReceptores = texturas;
         this.sonidoHerido = sonidoHerido;
     }
 
-    // MÉTODO MODIFICADO: Maneja la lógica de avance y victoria
-    public ReceptorAbstracto actualizarEstado(int puntosActuales, ReceptorAbstracto jugadorActual) {
-
-        // Si ya ganó, devolvemos el jugador sin hacer nada más.
-        if (ganoJuego(puntosActuales)) {
-            return jugadorActual;
+    public ReceptorAbstracto crearReceptor(int nivel) {
+        switch (nivel) {
+            case 1: return new Tarro(texturasReceptores.get(0), sonidoHerido);
+            case 2: return new Paraguas(texturasReceptores.get(1), sonidoHerido);
+            case 3: return new Persona(texturasReceptores.get(2), sonidoHerido);
+            case 4: return new Perro(texturasReceptores.get(3), sonidoHerido);
+            case 5: return new Vikingo(texturasReceptores.get(4), sonidoHerido);
+            default: return new Tarro(texturasReceptores.get(0), sonidoHerido);
         }
+    }
 
-        int nivelAnterior = this.nivelActual;
-
-        // LÓGICA DE PROGRESIÓN POR META FIJA
-        // Solo verificamos si no estamos en el Nivel Máximo
-        if (this.nivelActual < MAX_NIVELES) {
-
-            // La meta se busca en el array: array[nivelActual - 1]
-            // (Ej: Nivel 1 -> array[0] = 150 puntos)
-            int metaRequerida = METAS_NIVEL[this.nivelActual - 1];
-
-            if (puntosActuales >= metaRequerida) {
-                this.avanzarNivel();
-            }
-        }
-
-        // Si el nivel cambió, liberamos el anterior y creamos el nuevo receptor.
-        if (this.nivelActual > nivelAnterior) {
-            // Liberar recursos del personaje anterior (GM1.5)
-            ((Desechable)jugadorActual).liberarRecursos();
-
-            // Crear el nuevo receptor para el nuevo nivel
-            ReceptorAbstracto nuevoReceptor = this.crearReceptor(this.nivelActual);
-
-            // Transferir el puntaje y vidas al nuevo receptor
-            nuevoReceptor.setPuntos(puntosActuales);
-            nuevoReceptor.setVidas(jugadorActual.getVidas());
-
+    public ReceptorAbstracto actualizarEstado(int puntos, ReceptorAbstracto receptorActual) {
+        int nivelCalculado = calcularNivel(puntos);
+        if (nivelCalculado != this.nivelActual) {
+            this.nivelActual = nivelCalculado;
+            ReceptorAbstracto nuevoReceptor = this.crearReceptor(nivelCalculado);
+            nuevoReceptor.crear();
+            nuevoReceptor.setPuntos(receptorActual.getPuntos());
+            nuevoReceptor.setVidas(receptorActual.getVidas());
+            nuevoReceptor.setTieneEscudo(receptorActual.tieneEscudo()); // Transferir estado del escudo
+            receptorActual.liberarRecursos(); // Liberar recursos del receptor anterior
             return nuevoReceptor;
         }
-
-        return jugadorActual;
+        return receptorActual;
     }
 
-    private void avanzarNivel() {
-        if (this.nivelActual < MAX_NIVELES) {
-            this.nivelActual++;
-        }
+    private int calcularNivel(int puntos) {
+        if (puntos >= UMBRALES_NIVEL[4]) return 5; // 10,000+ puntos
+        if (puntos >= UMBRALES_NIVEL[3]) return 4; // 5,000+ puntos
+        if (puntos >= UMBRALES_NIVEL[2]) return 3; // 1,000+ puntos
+        if (puntos >= UMBRALES_NIVEL[1]) return 2; // 150+ puntos
+        return 1; // 0-149 puntos
     }
 
-    // LÓGICA DE INSTANCIACIÓN DE RECEPTORES (Factory Method Pattern)
-    public ReceptorAbstracto crearReceptor(int nivel) {
-        Texture texturaNivel = this.texturasReceptor.get(nivel - 1); // <-- CORRECCIÓN
-
-        ReceptorAbstracto nuevoReceptor;
-
-        switch (nivel) {
-            case 1:
-                nuevoReceptor = new Tarro(texturaNivel, this.sonidoHerido);
-                break;
-            case 2:
-                nuevoReceptor = new Paraguas(texturaNivel, this.sonidoHerido);
-                break;
-            case 3:
-                nuevoReceptor = new Persona(texturaNivel, this.sonidoHerido);
-                break;
-            case 4:
-                nuevoReceptor = new Perro(texturaNivel, this.sonidoHerido);
-                break;
-            case 5:
-                nuevoReceptor = new Vikingo(texturaNivel, this.sonidoHerido);
-                break;
-            default:
-                nuevoReceptor = new Tarro(this.texturasReceptor.get(0), this.sonidoHerido);
-                break;
-        }
-
-        nuevoReceptor.crear();
-        return nuevoReceptor;
+    public boolean ganoJuego(int puntos) {
+        return puntos >= 15000;
     }
 
-    // Getters
-    public int getNivelActual() { return nivelActual; }
-
-    // GM1.7: Penalización Progresiva
     public int obtenerPenalizacionPorNivel() {
         return this.nivelActual * 10;
     }
 
-    // Verifica la condición de victoria
-    public boolean ganoJuego(int puntosActuales) {
-        return puntosActuales >= META_PUNTOS_TOTAL;
+    public int getNivelActual() {
+        return this.nivelActual;
+    }
+
+    public int getVidasMaximas() {
+        if (nivelActual == 5) return 5; // Vikingo
+        return 3; // Otros receptores
     }
 }

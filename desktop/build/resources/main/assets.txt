@@ -1,4 +1,5 @@
 bucket.png
+curativa.png
 drop.png
 drop.wav
 dropBad.png

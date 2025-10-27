@@ -16,7 +16,7 @@ public class Tarro extends ReceptorAbstracto {
     @Override
     public void crear() {
         // Inicialización específica del Tarro (el Tarro empieza abajo)
-        this.limites = new Rectangle();
+        this.limites = new Rectangle(368f, 20f, ANCHO_RECEPTOR, ALTO_RECEPTOR);
         this.limites.x = 800 / 2 - 64 / 2;
         this.limites.y = 20;
         this.limites.width = 64;
