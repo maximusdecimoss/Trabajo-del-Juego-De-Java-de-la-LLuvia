@@ -1,13 +1,10 @@
 package puppy.code;
 
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 
-// ¡CORRECCIÓN CRÍTICA DE IMPORTS!
-// Asegúrate de que las rutas de los receptores sean correctas si están en un subpaquete.
-// Asumo que todos están en el paquete principal 'puppy.code'.
+// IMPORTS NECESARIOS PARA PODER INSTANCIAR LOS PERSONAJES
 import puppy.code.ReceptorAbstracto;
 import puppy.code.Desechable;
 import puppy.code.Tarro;
@@ -25,8 +22,16 @@ public class GestorNiveles {
 
     private int nivelActual = 1;
     private final int MAX_NIVELES = 5;
-    private final int PUNTOS_POR_NIVEL = 100;
-    private final int META_PUNTOS_TOTAL = 15000; // Constante de Victoria
+
+    // TABLA DE METAS FIJAS: Puntos necesarios para ENTRAR al siguiente nivel.
+    // Índice 0: Meta para Nivel 2 (150)
+    // Índice 1: Meta para Nivel 3 (1000)
+    // Índice 2: Meta para Nivel 4 (5000)
+    // Índice 3: Meta para Nivel 5 (10000)
+    private final int[] METAS_NIVEL = {150, 1000, 5000, 10000};
+
+    // CONDICIÓN DE VICTORIA FINAL
+    private final int META_PUNTOS_TOTAL = 15000;
 
     // Atributos de assets necesarios para crear los receptores
     private final Array<Texture> texturasReceptor;
@@ -38,7 +43,7 @@ public class GestorNiveles {
         this.sonidoHerido = sonidoHerido;
     }
 
-    // MÉTODO ACTUALIZADO: Maneja la lógica de avance y victoria
+    // MÉTODO MODIFICADO: Maneja la lógica de avance y victoria
     public ReceptorAbstracto actualizarEstado(int puntosActuales, ReceptorAbstracto jugadorActual) {
 
         // Si ya ganó, devolvemos el jugador sin hacer nada más.
@@ -48,9 +53,17 @@ public class GestorNiveles {
 
         int nivelAnterior = this.nivelActual;
 
-        // Lógica para verificar si se debe avanzar de nivel
-        if (puntosActuales >= this.nivelActual * PUNTOS_POR_NIVEL) {
-            this.avanzarNivel();
+        // LÓGICA DE PROGRESIÓN POR META FIJA
+        // Solo verificamos si no estamos en el Nivel Máximo
+        if (this.nivelActual < MAX_NIVELES) {
+
+            // La meta se busca en el array: array[nivelActual - 1]
+            // (Ej: Nivel 1 -> array[0] = 150 puntos)
+            int metaRequerida = METAS_NIVEL[this.nivelActual - 1];
+
+            if (puntosActuales >= metaRequerida) {
+                this.avanzarNivel();
+            }
         }
 
         // Si el nivel cambió, liberamos el anterior y creamos el nuevo receptor.
@@ -63,7 +76,7 @@ public class GestorNiveles {
 
             // Transferir el puntaje y vidas al nuevo receptor
             nuevoReceptor.setPuntos(puntosActuales);
-            nuevoReceptor.setVidas(jugadorActual.getVidas()); // Se asume que setVidas existe
+            nuevoReceptor.setVidas(jugadorActual.getVidas());
 
             return nuevoReceptor;
         }
@@ -79,7 +92,7 @@ public class GestorNiveles {
 
     // LÓGICA DE INSTANCIACIÓN DE RECEPTORES (Factory Method Pattern)
     public ReceptorAbstracto crearReceptor(int nivel) {
-        Texture texturaNivel = texturasReceptor.get(nivel - 1);
+        Texture texturaNivel = this.texturasReceptor.get(nivel - 1); // <-- CORRECCIÓN
 
         ReceptorAbstracto nuevoReceptor;
 
@@ -101,7 +114,7 @@ public class GestorNiveles {
                 break;
             default:
                 nuevoReceptor = new Tarro(this.texturasReceptor.get(0), this.sonidoHerido);
-                break; // Asegúrate que el break está aquí para evitar fallos
+                break;
         }
 
         nuevoReceptor.crear();

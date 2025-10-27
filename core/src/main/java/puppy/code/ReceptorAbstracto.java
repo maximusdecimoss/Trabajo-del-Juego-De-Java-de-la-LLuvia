@@ -97,20 +97,34 @@ public abstract class ReceptorAbstracto implements Desechable {
     }
 
     // MOVIMIENTO: Integración del Singleton (GM2.1)
-    public void actualizarMovimiento() {
+    public void actualizarMovimiento(boolean permitirMovimientoVertical) {
 
         // 1. Obtener el factor de velocidad del Singleton (Hueso/Lodo)
         float factorSingleton = GestorTiempo.getInstancia().getFactorVelocidadGlobal();
-
-        // 2. Calcular la velocidad real (VELOCIDAD_BASE * factorSingleton)
         float velocidadReal = VELOCIDAD_BASE * factorSingleton;
 
+        // Movimiento Lateral (X) - Siempre permitido
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             this.limites.x -= velocidadReal * Gdx.graphics.getDeltaTime();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             this.limites.x += velocidadReal * Gdx.graphics.getDeltaTime();
         }
+
+        // ¡NUEVA LÓGICA! - Movimiento Vertical (Y) - Solo si se permite (Nivel 3)
+        if (permitirMovimientoVertical) {
+            if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
+                this.limites.y += velocidadReal * Gdx.graphics.getDeltaTime();
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                this.limites.y -= velocidadReal * Gdx.graphics.getDeltaTime();
+            }
+
+            // Límite superior/inferior (para que no salga del área de juego)
+            if(this.limites.y < 0) this.limites.y = 0;
+            if(this.limites.y > 480 - 64) this.limites.y = 480 - 64; // Asumiendo alto de pantalla 480
+        }
+
 
         // Que no se salga de los bordes izq y der (Lógica de 800x480)
         if(this.limites.x < 0) this.limites.x = 0;

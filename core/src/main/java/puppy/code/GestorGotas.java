@@ -11,6 +11,9 @@ import puppy.code.IFabricaObjetosLluviosos; // La interfaz que usan las fábrica
 import puppy.code.FabricaNivel1;             // Necesaria para Nivel 1 y default
 import puppy.code.FabricaNivel2;             // Necesaria para Nivel 2
 import puppy.code.FabricaNivel3;
+// Es necesario importar las fábricas de Nivel 4 y Nivel 5 para la verificación
+import puppy.code.FabricaNivel4;
+import puppy.code.FabricaNivel5;
 
 
 public class GestorGotas implements Desechable {
@@ -35,18 +38,15 @@ public class GestorGotas implements Desechable {
     private final Texture texturaMoneda;
 
     // Atributos de texturas de Nivel 4
-    private final Texture texturaLodo; //
-    private final Texture texturaHueso; //
+    private final Texture texturaLodo;
+    private final Texture texturaHueso;
 
     // Atributos Nivel 5
-
-    private final Texture texturaMeteoro; // NUEVO
-    private final Texture texturaPocion; // NUEVO
+    private final Texture texturaMeteoro;
+    private final Texture texturaPocion;
 
     // NUEVO ATRIBUTO CLAVE: La Fábrica Abstracta que usamos para crear ítems (GM2.4)
     private IFabricaObjetosLluviosos fabricaActual;
-
-
 
 
     // CONSTRUCTOR: Recibe TODAS las texturas necesarias
@@ -71,11 +71,11 @@ public class GestorGotas implements Desechable {
         this.texturaMoneda = texMoneda;
 
         // Nivel 4
-        this.texturaHueso = texHueso; // ¡Asignación!
-        this.texturaLodo = texLodo;   // ¡Asignación!
+        this.texturaHueso = texHueso;
+        this.texturaLodo = texLodo;
 
-        this.texturaMeteoro = texMeteoro; // Asignación de Nivel 5
-        this.texturaPocion = texPocion;   // Asignación de Nivel 5
+        this.texturaMeteoro = texMeteoro;
+        this.texturaPocion = texPocion;
 
         // Inicializa la lista de objetos
         this.objetosLluviosos = new Array<>();
@@ -94,7 +94,7 @@ public class GestorGotas implements Desechable {
         ObjetoLluviosoAbstracto nuevoObjeto = null;
 
         // Probabilidad: 30% Malo (3 o menos), 70% Bueno (4 o más)
-        if (MathUtils.random(1, 10) <= 3) { // <-- ¡CORRECCIÓN! Usar <= 3
+        if (MathUtils.random(1, 10) <= 3) {
             // Usar la fábrica actual para crear el Objeto Malo del Nivel
             nuevoObjeto = this.fabricaActual.crearObjetoMalo(posicionX);
         } else {
@@ -104,6 +104,15 @@ public class GestorGotas implements Desechable {
 
         // Añadir el objeto si se creó
         if (nuevoObjeto != null) {
+
+            // *****************************************************************
+            // ¡IMPLEMENTACIÓN CLAVE DEL STRATEGY DE MOVIMIENTO (GM2.3)!
+            // Si la fábrica actual es la del Nivel 3, cambiamos la estrategia.
+            if (this.fabricaActual instanceof FabricaNivel3) {
+                nuevoObjeto.setEstrategiaMovimiento(new EstrategiaMovimientoLateral());
+            }
+            // *****************************************************************
+
             this.objetosLluviosos.add(nuevoObjeto);
         }
 
@@ -122,8 +131,6 @@ public class GestorGotas implements Desechable {
             this.fabricaActual = this.seleccionarFabrica(nivelActual);
 
             // ¡CORRECCIÓN CLAVE! Vaciamos la lista de objetos lluviosos.
-            // Esto es necesario para que los ítems del nivel anterior (Rocas/Escudos)
-            // no sigan cayendo después de que se selecciona la nueva fábrica (Moneda/Globo).
             this.objetosLluviosos.clear();
         }
 
@@ -131,7 +138,7 @@ public class GestorGotas implements Desechable {
         float factorVelocidad = 1.0f + (nivelActual - 1) * 0.2f;
 
         // Generar nueva gota: Usa la fábrica seleccionada
-        if (TimeUtils.nanoTime() - this.tiempoUltimaGota > 1000000000L / nivelActual) {
+        if (TimeUtils.nanoTime() - this.tiempoUltimaGota > (1000000000L * 2) / nivelActual) {
             this.crearObjetoLluvioso();
         }
 
@@ -143,6 +150,8 @@ public class GestorGotas implements Desechable {
             objeto.actualizar(factorVelocidad);
 
             // 1. Eliminar si está fuera de pantalla
+            // NOTA: Con la EstrategiaLateral, esta condición solo debería cumplirse cuando
+            // los objetos caen lentamente por la parte inferior.
             if (objeto.estaFueraDePantalla()) {
                 this.objetosLluviosos.removeIndex(i);
                 --i;
@@ -169,7 +178,7 @@ public class GestorGotas implements Desechable {
         if (nivel == 1) return this.fabricaActual instanceof FabricaNivel1;
         if (nivel == 2) return this.fabricaActual instanceof FabricaNivel2;
         if (nivel == 3) return this.fabricaActual instanceof FabricaNivel3;
-        if (nivel == 4) return this.fabricaActual instanceof FabricaNivel4;// <-- ¡NIVEL 3!
+        if (nivel == 4) return this.fabricaActual instanceof FabricaNivel4;
         if (nivel == 5) return this.fabricaActual instanceof FabricaNivel5;
         return false;
     }
@@ -182,14 +191,11 @@ public class GestorGotas implements Desechable {
             case 2:
                 return new FabricaNivel2(this.texturaRoca, this.texturaEscudo);
             case 3:
-                return new FabricaNivel3(this.texturaGloboAgua, this.texturaMoneda); // ¡Añadir fábrica para nivel 3!
-
-            case 4: // <-- ¡ESTE CASE DEBE EXISTIR Y USAR FabricaNivel4!
+                return new FabricaNivel3(this.texturaGloboAgua, this.texturaMoneda);
+            case 4:
                 return new FabricaNivel4(this.texturaLodo, this.texturaHueso);
             case 5:
-                // ¡Nivel 5!
                 return new FabricaNivel5(this.texturaMeteoro, this.texturaPocion);
-
             default:
                 return new FabricaNivel1(this.texturaGotaMala, this.texturaGotaBuena);
         }
@@ -203,7 +209,7 @@ public class GestorGotas implements Desechable {
         }
     }
 
-    // LIBERACIÓN DE RECURSOS (GM1.5)
+    // LIBERACIÓN DE RECURSOS (GM1.5) - CORREGIDO
     @Override
     public void liberarRecursos() {
         this.sonidoGota.dispose();
@@ -212,9 +218,11 @@ public class GestorGotas implements Desechable {
         this.texturaGotaMala.dispose();
         this.texturaRoca.dispose();
         this.texturaEscudo.dispose();
-        this.texturaGloboAgua.dispose(); // ¡Añadir!
+        this.texturaGloboAgua.dispose();
         this.texturaMoneda.dispose();
-
-        // AGREGAR dispose() PARA LAS TEXTURAS DE NIVELES 3, 4, 5
+        this.texturaHueso.dispose(); // ¡Añadido!
+        this.texturaLodo.dispose();   // ¡Añadido!
+        this.texturaMeteoro.dispose(); // ¡Añadido!
+        this.texturaPocion.dispose(); // ¡Añadido!
     }
 }
