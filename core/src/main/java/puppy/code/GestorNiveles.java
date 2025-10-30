@@ -10,7 +10,7 @@ public class GestorNiveles {
     private int nivelActual = 1;
 
     // Umbrales de puntos para cada nivel
-    private static final int[] UMBRALES_NIVEL = {0, 30, 250, 600, 1000};
+    private static final int[] UMBRALES_NIVEL = {0, 20, 50, 100, 1000};
 
     public GestorNiveles(Array<Texture> texturas, Sound sonidoHerido) {
         this.texturasReceptores = texturas;
