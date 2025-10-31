@@ -4,7 +4,7 @@ A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://git
 
 This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
 
-Este proyecto implementa un juego de evasión y recolección basado en LibGDX, utilizando la Programación Orientada a Objetos (POO) y Patrones de Diseño para crear una arquitectura flexible, limpia y escalable.
+Este proyecto implementa un juego de evasión y recolección basado en LibGDX y desarrollado en el IDE IntelliJ de JetBrains, utilizando la Programación Orientada a Objetos (POO) y Patrones de Diseño para crear una arquitectura flexible, limpia y escalable.
 
 El diseño del juego cumple con el Principio de Responsabilidad Única (GM1.6), delegando la lógica central a clases especializadas para evitar la saturación de la clase principal (GameLluvia).
 
@@ -65,3 +65,6 @@ El proyecto sigue un diseño modular y limpio, con clases agrupadas por responsa
 - GestorTiempo.java: Singleton para efectos de velocidad.
 - interfaces/: Contiene Desechable, IFabricaObjetosLluviosos, etc.
 - receptores/: Contiene Tarro.java, Vikingo.java, ReceptorAbstracto.java.
+
+## Como jugar?
+Usted solo debe abrir el proyecto en su IDE intelliJ, comprobar que esta en la carpeta correcta(Carpeta que contiene el proyecto) y apretar el boton de run. El programa comenzara a compilar unos segundos y le desplegara una ventana con el juego ya funcionando.
