@@ -23,8 +23,8 @@ Nivel | Personaje | Movimiento | Meta de Puntos
 1 | Tarro | Caída vertical | 150
 2 | Paraguas | Caída vertical | 1.000
 3 | Persona | Movimiento lateral | 5.000
-4 | Perro | Efectos especiales (Singleton) | 10.000
-5 | Vikingo | Máxima dificultad (Iterator/Strategy) | 15.000 (meta final)
+4 | Perro | Efectos especiales de lentitud al agarrar el lodo | 10.000
+5 | Vikingo | Máxima dificultad ) | 15.000 (meta final)
 
 ⚙️ Características Técnicas
 
