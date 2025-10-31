@@ -1,8 +1,8 @@
 # PROYECTO FINAL: JUEGO DE LA LLUVIA
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+Este es un proyecto de libGDX generado con gdx-liftoff.
 
-This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
+Este proyecto se genero con una plantilla que incluye lanzadores de aplicaciones sencillos y una extensión de ApplicationAdapter que dibuja el logo de libGDX.
 
 Este proyecto implementa un juego de evasión y recolección basado en LibGDX y desarrollado en el IDE IntelliJ de JetBrains, utilizando la Programación Orientada a Objetos (POO) y Patrones de Diseño para crear una arquitectura flexible, limpia y escalable.
 
