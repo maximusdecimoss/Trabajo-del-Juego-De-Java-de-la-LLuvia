@@ -34,18 +34,14 @@ Strategy	IEstrategiaRecoleccion	Cambia el modo de puntuación (Furia)
 
 Controles
 
-Acción	Tecla
-Mover Izquierda/Derecha	⬅️ ➡️
-Mover Arriba/Abajo (Nivel 3)	⬆️ ⬇️
-Usar Poción (Vikingo)	Espacio
-Activar/Desactivar Furia	F
-🧠 Progresión de Niveles
-Nivel	Personaje	Movimiento	Meta de Puntos
-1	Tarro	Caída vertical	150
-2	Paraguas	Caída vertical	1.000
-3	Persona	Movimiento lateral	5.000
-4	Perro	Efectos especiales	10.000
-5	Vikingo	Máxima dificultad	15.000 (meta final)
+
+Nivel | Personaje | Movimiento | Meta de Puntos
+------|------------|-------------|----------------
+1 | Tarro | Caída vertical | 150
+2 | Paraguas | Caída vertical | 1.000
+3 | Persona | Movimiento lateral | 5.000
+4 | Perro | Efectos especiales | 10.000
+5 | Vikingo | Máxima dificultad | 15.000 (meta final)
 📦 Instalación y Ejecución
 
 Clona o descarga el proyecto
