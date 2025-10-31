@@ -1,70 +1,70 @@
-# PROYECTO FINAL: JUEGO DE LA LLUVIA
+Juego de la Lluvia — Proyecto Final (LibGDX)
 
-Este es un proyecto de libGDX generado con gdx-liftoff.
+El Juego de la lluvia es un juego de evasión y recolección desarrollado con LibGDX en IntelliJ IDEA, utilizando Programación Orientada a Objetos y Patrones de Diseño para lograr una arquitectura flexible, limpia y escalable.
 
-Este proyecto se genero con una plantilla que incluye lanzadores de aplicaciones sencillos y una extensión de ApplicationAdapter que dibuja el logo de libGDX.
+Descripción General
 
-Este proyecto implementa un juego de evasión y recolección basado en LibGDX y desarrollado en el IDE IntelliJ de JetBrains, utilizando la Programación Orientada a Objetos (POO) y Patrones de Diseño para crear una arquitectura flexible, limpia y escalable.
+El jugador debe mover su personaje (Receptor) para atrapar los objetos buenos y evitar los malos.
+El objetivo es alcanzar 15.000 puntos o sobrevivir los 5 niveles de dificultad progresiva.
 
-El diseño del juego cumple con el Principio de Responsabilidad Única (GM1.6), delegando la lógica central a clases especializadas para evitar la saturación de la clase principal (GameLluvia).
+Descripción General
 
-## ARQUITECTURA GENERAL Y PATRONES DE DISEÑO
+El jugador debe mover su personaje (Receptor) para atrapar los objetos buenos y evitar los malos, mientras se enfrenta a condiciones cada vez mas adversas.
+El objetivo es alcanzar 15.000 puntos mientras sobrevives a los 5 niveles de dificultad progresiva.
 
-El juego está dividido en 5 niveles que cambian el personaje (Receptor) y los ítems que caen (Objetos Lluviosos), logrando la máxima optimización mediante patrones:
+Características Técnicas
 
-## Patrones de Diseño Utilizados
+Motor: LibGDX
 
-| **Patrón** | **Clase/Rol** | **Propósito en el Juego** |
-|-------------|----------------|-----------------------------|
-| **Abstract Factory (GM2.4)** | `IFabricaObjetosLluviosos` (Interfaces) y `GestorGotas` (Contexto) | Controla la **creación de ítems** por nivel. El `GestorGotas` solo solicita un objeto "bueno" o "malo", delegando la decisión de instanciar (`Roca`, `Moneda`, `Meteoro`) a la fábrica específica del nivel actual (`FabricaNivelX`). |
-| **Singleton (GM2.1)** | `GestorTiempo` y `GestorRecursos` | `GestorTiempo` controla la velocidad global (efectos de Hueso/Lodo). `GestorRecursos` centraliza la carga y liberación de todos los assets (`Texture`, `Sound`, `Music`), optimizando la memoria (GM1.6). |
-| **Template Method (GM2.2)** | `ObjetoLluviosoAbstracto.destruir()` | Define el algoritmo de **destrucción** de un objeto en una secuencia fija (limpiar límites → liberar recursos únicos), obligando a las subclases a seguir el proceso. |
+Lenguaje: Java 11 o superior
 
-## Patrones de Comportamiento (Habilidades del Vikingo)
+IDE: IntelliJ IDEA
 
-| **Patrón** | **Clase/Rol** | **Funcionalidad** |
-|-------------|----------------|-------------------|
-| **Iterator (GM2.2)** | `Vikingo` y `ContenedorPociones` | Gestiona el uso de las **3 pociones de vida** del Vikingo de forma controlada. Permite consumir las pociones una a una sin exponer el array interno. |
-| **Strategy (GM2.3)** | `IEstrategiaRecoleccion` y `ReceptorAbstracto` | Permite al Vikingo **cambiar su comportamiento de puntuación** en tiempo real (activar el modo Furia para obtener el doble de puntos). |
+Paradigma: Programación Orientada a Objetos
 
-## MECÁNICAS DE JUEGO
+Arquitectura: Basada en el Principio de Responsabilidad Única (SRP)
 
-El objetivo es alcanzar 15,000 puntos o sobrevivir a los 5 niveles de dificultad progresiva.
+⚙️ Patrones de Diseño Usados
+Patrón	Clase	Propósito
+Abstract Factory	IFabricaObjetosLluviosos, GestorGotas	Crea los ítems del nivel actual
+Singleton	GestorTiempo, GestorRecursos	Control global de velocidad y recursos
+Template Method	ObjetoLluviosoAbstracto.destruir()	Secuencia fija de destrucción
+Iterator	ContenedorPociones	Controla las pociones del Vikingo
+Strategy	IEstrategiaRecoleccion	Cambia el modo de puntuación (Furia)
 
-## Controles y Movimiento
+Controles
 
-- **Movimiento General:** Flechas Izquierda/Derecha.  
-- **Movimiento Especial (Nivel 3 – Persona):** Flechas Arriba/Abajo (Movimiento 2D).  
-- **Habilidad (Nivel 5 – Vikingo):**  
-  - **[ESPACIO]:** Usa una Poción de Vida *(Iterator)*.  
-  - **[F]:** Activa/Desactiva el **Modo Furia** *(Doble Puntuación – Strategy)*.  
+Acción	Tecla
+Mover Izquierda/Derecha	⬅️ ➡️
+Mover Arriba/Abajo (Nivel 3)	⬆️ ⬇️
+Usar Poción (Vikingo)	Espacio
+Activar/Desactivar Furia	F
+🧠 Progresión de Niveles
+Nivel	Personaje	Movimiento	Meta de Puntos
+1	Tarro	Caída vertical	150
+2	Paraguas	Caída vertical	1.000
+3	Persona	Movimiento lateral	5.000
+4	Perro	Efectos especiales	10.000
+5	Vikingo	Máxima dificultad	15.000 (meta final)
+📦 Instalación y Ejecución
 
-## Progresión de Niveles (Metas Fijas)
+Clona o descarga el proyecto
 
-| **Nivel** | **Personaje (Receptor)** | **Movimiento de ítems** | **Puntos para Siguiente Nivel** |
-|------------|----------------------------|----------------------------|----------------------------------|
-| **1** | Tarro | Vertical (Caída Normal) | 150 pts |
-| **2** | Paraguas | Vertical (Caída Normal) | 1,000 pts |
-| **3** | Persona | Lateral (Izq. a Der.) | 5,000 pts |
-| **4** | Perro | Vertical (Efectos Singleton) | 10,000 pts |
-| **5** | Vikingo | Vertical (Máxima Dificultad) | **Meta Final: 15,000 pts** |
+git clone https://github.com/tuusuario/JuegoLluvia.git
 
-# Lógica de Dificultad
 
-- Penalización Progresiva: Cada golpe resta -1 vida y una penalización de puntos equivalente a Nivel Actual 10 puntos (Ejemplo: -50 puntos en Nivel 5).
-- Velocidad: La velocidad de caída y la frecuencia de aparición de ítems aumentan con cada nivel.
+Abre la carpeta en IntelliJ IDEA
 
-## Estructura del Código
+Verifica que el JDK esté configurado (Java 17 recomendado)
 
-El proyecto sigue un diseño modular y limpio, con clases agrupadas por responsabilidad.
+Pulsa Run ▶️ y el juego se iniciará tras compilar
 
-- GameLluvia.java: Coordinador de LibGDX (Clase Despejada).
-- IniciadorJuego.java: Cableado de dependencias (Factory).
-- GestorControlJuego.java: Lógica de juego y HUD.
-- GestorGotas.java: Contexto del Abstract Factory.
-- GestorTiempo.java: Singleton para efectos de velocidad.
-- interfaces/: Contiene Desechable, IFabricaObjetosLluviosos, etc.
-- receptores/: Contiene Tarro.java, Vikingo.java, ReceptorAbstracto.java.
+🧩 Créditos
 
-## Como jugar?
-Usted solo debe abrir el proyecto en su IDE intelliJ, comprobar que esta en la carpeta correcta(Carpeta que contiene el proyecto) y apretar el boton de run. El programa comenzara a compilar unos segundos y le desplegara una ventana con el juego ya funcionando.
+Desarrollador: Víctor Guilarte
+
+Framework: LibGDX
+
+IDE: IntelliJ IDEA
+
+Sonidos e imágenes: Libres de derechos / fuentes propias
