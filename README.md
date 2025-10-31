@@ -42,22 +42,25 @@ Nivel | Personaje | Movimiento | Meta de Puntos
 3 | Persona | Movimiento lateral | 5.000
 4 | Perro | Efectos especiales | 10.000
 5 | Vikingo | Máxima dificultad | 15.000 (meta final)
+
 📦 Instalación y Ejecución
 
 Clona o descarga el proyecto
 
-git clone https://github.com/tuusuario/JuegoLluvia.git
-
+git clon (https://github.com/maximusdecimoss/Trabajo-del-Juego-De-Java-de-la-LLuvia.git)
 
 Abre la carpeta en IntelliJ IDEA
 
-Verifica que el JDK esté configurado (Java 17 recomendado)
+Verifica que el JDK esté configurado (Java 11 recomendado)
 
 Pulsa Run ▶️ y el juego se iniciará tras compilar
 
-🧩 Créditos
 
-Desarrollador: Víctor Guilarte
+Desarrolladores: 
+
+-.Víctor Guilarte
+-.Nicolas Fuentes
+-.Eduardo Sandoval
 
 Framework: LibGDX
 
