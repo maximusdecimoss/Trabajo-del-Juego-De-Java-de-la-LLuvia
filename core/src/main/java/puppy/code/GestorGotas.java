@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.math.MathUtils;
 
-public class GestorGotas implements Desechable {
+public class GestorGotas {
     private Array<ObjetoLluviosoAbstracto> objetosLluviosos;
     private long tiempoUltimaGota;
     private Sound sonidoGota;
@@ -142,21 +142,6 @@ public class GestorGotas implements Desechable {
                 return new FabricaNivel1(recursos.getTGotaMala(), recursos.getTGotaBuena());
         }
     }
-
-    @Override
-    public void liberarRecursos() {
-        this.sonidoGota.dispose();
-        this.musicaLluvia.dispose();
-        this.texturaGotaBuena.dispose();
-        this.texturaGotaMala.dispose();
-        this.texturaRoca.dispose();
-        this.texturaEscudo.dispose();
-        this.texturaGloboAgua.dispose();
-        this.texturaMoneda.dispose();
-        this.texturaHueso.dispose();
-        this.texturaLodo.dispose();
-        this.texturaMeteoro.dispose();
-        this.texturaPocion.dispose();
-        this.texturaGotaCurativa.dispose();
-    }
 }
+
+

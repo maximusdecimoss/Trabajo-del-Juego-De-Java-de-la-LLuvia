@@ -18,6 +18,5 @@ public class Pocion extends ObjetoLluviosoAbstracto {
         // NOTA: Esta poción de la lluvia solo da puntos, el jugador activa la poción real con [ESPACIO].
     }
 
-    @Override
-    protected void liberarRecursosUnicos() { } // Template Method (GM2.2)
+
 }

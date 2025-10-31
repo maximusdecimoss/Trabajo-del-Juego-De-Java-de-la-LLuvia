@@ -28,10 +28,7 @@ public class Roca extends ObjetoLluviosoAbstracto {
         }
     }
 
-    @Override
-    protected void liberarRecursosUnicos() {
-        // No hay recursos únicos para liberar en esta clase.
-    }
+
 }
 
 

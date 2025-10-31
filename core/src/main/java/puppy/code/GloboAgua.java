@@ -35,8 +35,5 @@ public class GloboAgua extends ObjetoLluviosoAbstracto {
 
     }
 
-    protected void liberarRecursosUnicos() {
-        // No hay recursos únicos para liberar en esta clase.
-    }
 }
 

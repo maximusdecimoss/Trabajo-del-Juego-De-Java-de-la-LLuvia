@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Rectangle;
  * Contiene la lógica común de estadísticas, movimiento y colisión.
  * (Cumple GM1.4)
  */
-public abstract class ReceptorAbstracto implements Desechable {
+public abstract class ReceptorAbstracto  {
     protected IEstrategiaRecoleccion estrategiaRecoleccion;
     protected Rectangle limites;
     protected Texture imagen;
@@ -125,5 +125,5 @@ public abstract class ReceptorAbstracto implements Desechable {
     public void setTieneEscudo(boolean tieneEscudo) { this.tieneEscudo = tieneEscudo; }
     public boolean tieneEscudo() { return this.tieneEscudo; }
 
-    public abstract void liberarRecursos();
+
 }

@@ -18,7 +18,4 @@ public class GotaMala extends ObjetoLluviosoAbstracto {
         receptor.dañar(gestor);
     }
 
-    protected void liberarRecursosUnicos() {
-        // No hay recursos únicos para liberar en esta clase.
-    }
 }

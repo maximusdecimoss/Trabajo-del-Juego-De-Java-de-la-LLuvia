@@ -24,7 +24,5 @@ public class Meteoro extends ObjetoLluviosoAbstracto {
             receptor.setPuntos(0);
         }
     }
-
-    @Override
-    protected void liberarRecursosUnicos() { }
 }
+

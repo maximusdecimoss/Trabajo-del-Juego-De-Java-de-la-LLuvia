@@ -67,8 +67,5 @@ public class Vikingo extends ReceptorAbstracto {
         // No hay recursos únicos para liberar en esta clase.
     }
 
-    @Override
-    public void liberarRecursos() {
-        // Implementación de la interfaz Desechable
-    }
+
 }

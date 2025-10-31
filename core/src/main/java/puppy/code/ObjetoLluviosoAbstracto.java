@@ -6,9 +6,8 @@ import com.badlogic.gdx.math.Rectangle;
 
 /**
  * Clase padre abstracta para todos los objetos que caen.
- * Ahora actúa como el CONTEXTO del patrón Strategy para el movimiento (GM2.3).
  */
-public abstract class ObjetoLluviosoAbstracto implements Desechable {
+public abstract class ObjetoLluviosoAbstracto  {
 
     // PATRÓN STRATEGY (GM2.3): Atributo del Contexto
     protected IEstrategiaMovimiento estrategiaMovimiento;
@@ -33,39 +32,27 @@ public abstract class ObjetoLluviosoAbstracto implements Desechable {
         this.estrategiaMovimiento = new EstrategiaCaidaVertical();
     }
 
-    // PASO ABSTRACTO (Paso variable del Template Method)
-    protected abstract void liberarRecursosUnicos();
 
-    // TEMPLATE METHOD (GM2.2): Esqueleto del algoritmo de destrucción
-    public final void destruir() {
-        // PASO 1: Limpieza de variables (Paso Fijo)
-        this.limites = null;
-
-        // PASO 2: Liberación de recursos únicos de la subclase (Paso Variable)
-        this.liberarRecursosUnicos();
-    }
-
-    // NUEVO MÉTODO: Permite cambiar la Estrategia en tiempo de ejecución
     public void setEstrategiaMovimiento(IEstrategiaMovimiento nuevaEstrategia) {
         this.estrategiaMovimiento = nuevaEstrategia;
     }
 
-    // MÉTODO CONCRETO (Lógica de movimiento compartida) - ¡MODIFICADO PARA DELEGAR!
+
 
     public void actualizar(float factorVelocidad) {
         // DELEGA la tarea de mover a la Estrategia actual (GM2.3)
         this.estrategiaMovimiento.mover(this.limites, this.velocidad, factorVelocidad);
     }
 
-    // MÉTODO ABSTRACTO (El polimorfismo clave)
+
     public abstract void aplicarEfecto(ReceptorAbstracto receptor, GestorNiveles gestor);
 
-    // DIBUJO CONCRETO
+
     public void dibujar(SpriteBatch batch) {
         batch.draw(this.textura, this.limites.x, this.limites.y, this.limites.width, this.limites.height);
     }
 
-    // UTILIDADES
+
     public boolean estaFueraDePantalla() {
         // La lógica de salida de pantalla debe considerar las nuevas reglas de movimiento lateral
         // Pero para mantener la compatibilidad con el Template Method, la dejamos así.
@@ -76,9 +63,5 @@ public abstract class ObjetoLluviosoAbstracto implements Desechable {
         return this.limites;
     }
 
-    // IMPLEMENTACIÓN DESECHABLE (GM1.5)
-    @Override
-    public void liberarRecursos() {
-        this.destruir();
-    }
+
 }

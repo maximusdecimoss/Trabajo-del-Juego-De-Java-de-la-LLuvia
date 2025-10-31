@@ -10,7 +10,7 @@ public class GestorNiveles {
     private int nivelActual = 1;
 
     // Umbrales de puntos para cada nivel
-    private static final int[] UMBRALES_NIVEL = {0, 20, 50, 100, 1000};
+    private static final int[] UMBRALES_NIVEL = {0, 150, 1000, 5000, 10000};
 
     public GestorNiveles(Array<Texture> texturas, Sound sonidoHerido) {
         this.texturasReceptores = texturas;
@@ -37,7 +37,7 @@ public class GestorNiveles {
             nuevoReceptor.setPuntos(receptorActual.getPuntos());
             nuevoReceptor.setVidas(receptorActual.getVidas());
             nuevoReceptor.setTieneEscudo(receptorActual.tieneEscudo()); // Transferir estado del escudo
-            receptorActual.liberarRecursos(); // Liberar recursos del receptor anterior
+            // Liberar recursos del receptor anterior
             return nuevoReceptor;
         }
         return receptorActual;

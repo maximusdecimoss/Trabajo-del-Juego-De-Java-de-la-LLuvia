@@ -17,8 +17,5 @@ public class GotaCurativa extends ObjetoLluviosoAbstracto {
         }
     }
 
-    @Override
-    protected void liberarRecursosUnicos() {
-        // No hay recursos únicos para liberar
-    }
+
 }

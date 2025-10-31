@@ -26,13 +26,5 @@ public class Tarro extends ReceptorAbstracto {
         // No hay recursos únicos para liberar en esta clase.
     }
 
-    @Override
-    public void liberarRecursos() {
-        // Tarro (o el Receptor) es responsable de liberar sus propios assets.
-        this.imagen.dispose();
-        this.sonidoHerido.dispose();
-    }
 
-    // NOTA: Todos los demás métodos (dañar, sumarPuntos, isGameOver, etc.)
-    // son heredados de ReceptorAbstracto, ¡así que no necesitas escribirlos aquí!
 }

@@ -6,11 +6,5 @@ import com.badlogic.gdx.math.Rectangle;
  */
 public interface IEstrategiaMovimiento {
 
-    /**
-     * Calcula y actualiza la posición del objeto.
-     * @param limites El área del objeto a mover (Rectangle).
-     * @param velocidadCaida La velocidad base del objeto.
-     * @param factorVelocidad El factor de dificultad y Singleton.
-     */
     void mover(Rectangle limites, float velocidadCaida, float factorVelocidad);
 }

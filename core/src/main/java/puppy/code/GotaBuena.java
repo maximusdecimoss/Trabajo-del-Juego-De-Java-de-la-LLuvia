@@ -17,7 +17,4 @@ public class GotaBuena extends ObjetoLluviosoAbstracto {
         receptor.sumarPuntos(10);
     }
 
-    protected void liberarRecursosUnicos() {
-        // No hay recursos únicos para liberar en esta clase.
-    }
 }

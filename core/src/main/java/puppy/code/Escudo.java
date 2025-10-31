@@ -13,8 +13,4 @@ public class Escudo extends ObjetoLluviosoAbstracto {
         receptor.sumarPuntos(50); // Suma puntos por recoger el escudo
     }
 
-    @Override
-    protected void liberarRecursosUnicos() {
-        // No hay recursos únicos para liberar
-    }
 }

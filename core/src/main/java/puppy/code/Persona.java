@@ -20,13 +20,4 @@ public class Persona extends ReceptorAbstracto {
         this.limites.height = 64;
     }
 
-    @Override
-    public void liberarRecursos() {
-        this.imagen.dispose();
-        this.sonidoHerido.dispose();
-    }
-
-    protected void liberarRecursosUnicos() {
-        // No hay recursos únicos para liberar en esta clase.
-    }
 }

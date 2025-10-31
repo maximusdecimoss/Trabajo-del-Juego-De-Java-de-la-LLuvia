@@ -20,7 +20,5 @@ public class Lodo extends ObjetoLluviosoAbstracto {
         GestorTiempo.getInstancia().aplicarEfectoTemporal(0.5f, 5.0f);
     }
 
-    protected void liberarRecursosUnicos() {
-        // No hay recursos únicos para liberar en esta clase.
-    }
+
 }
