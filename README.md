@@ -4,11 +4,6 @@ El Juego de la lluvia es un juego de evasión y recolección desarrollado con Li
 
 Descripción General
 
-El jugador debe mover su personaje (Receptor) para atrapar los objetos buenos y evitar los malos.
-El objetivo es alcanzar 15.000 puntos o sobrevivir los 5 niveles de dificultad progresiva.
-
-Descripción General
-
 El jugador debe mover su personaje (Receptor) para atrapar los objetos buenos y evitar los malos, mientras se enfrenta a condiciones cada vez mas adversas.
 El objetivo es alcanzar 15.000 puntos mientras sobrevives a los 5 niveles de dificultad progresiva.
 
