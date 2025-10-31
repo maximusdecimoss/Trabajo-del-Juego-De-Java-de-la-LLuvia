@@ -54,7 +54,9 @@ Pulsa Run ▶️ y el juego se iniciará tras compilar
 Desarrolladores: 
 
 -.Víctor Guilarte
+
 -.Nicolas Fuentes
+
 -.Eduardo Sandoval
 
 Framework: LibGDX
