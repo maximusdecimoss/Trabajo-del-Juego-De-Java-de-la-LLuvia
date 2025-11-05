@@ -22,9 +22,7 @@ public class Tarro extends ReceptorAbstracto {
         this.limites.width = 64;
         this.limites.height = 64;
     }
-    protected void liberarRecursosUnicos() {
-        // No hay recursos únicos para liberar en esta clase.
-    }
+
 
 
 }

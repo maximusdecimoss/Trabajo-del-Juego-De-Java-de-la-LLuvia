@@ -63,9 +63,7 @@ public class Vikingo extends ReceptorAbstracto {
     public int getPocionesRestantes() {
         return this.pocionesRestantes;
     }
-    protected void liberarRecursosUnicos() {
-        // No hay recursos únicos para liberar en esta clase.
-    }
+
 
 
 }
