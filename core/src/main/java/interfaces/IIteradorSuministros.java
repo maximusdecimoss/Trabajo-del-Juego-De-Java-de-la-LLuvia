@@ -1,5 +1,5 @@
 // Archivo: IIteradorSuministros.java
-package puppy.code;
+package interfaces;
 
 /**
  * Define la interfaz del Patrón Iterator (GM2.2).

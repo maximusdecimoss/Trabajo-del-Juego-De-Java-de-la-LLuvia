@@ -1,6 +1,8 @@
 // Archivo: EstrategiaNormal.java
 package puppy.code;
 
+import interfaces.IEstrategiaRecoleccion;
+
 /**
  * Estrategia Concreta: Recolección estándar (1x el puntaje base).
  */

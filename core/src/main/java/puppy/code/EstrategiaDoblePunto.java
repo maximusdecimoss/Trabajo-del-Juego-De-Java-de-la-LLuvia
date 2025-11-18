@@ -1,6 +1,8 @@
 // Archivo: EstrategiaDoblePunto.java
 package puppy.code;
 
+import interfaces.IEstrategiaRecoleccion;
+
 /**
  * Estrategia Concreta: Recolección doble (2x el puntaje base).
  */

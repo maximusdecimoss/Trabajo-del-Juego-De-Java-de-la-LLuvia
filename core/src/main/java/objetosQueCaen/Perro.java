@@ -1,9 +1,10 @@
 // Archivo: Perro.java
-package puppy.code;
+package objetosQueCaen;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import Gestores.ReceptorAbstracto;
 
 public class Perro extends ReceptorAbstracto {
 

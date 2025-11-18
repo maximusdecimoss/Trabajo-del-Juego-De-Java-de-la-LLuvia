@@ -1,5 +1,6 @@
 package puppy.code;
 
+import Gestores.GestorControlJuego;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -13,9 +14,9 @@ public class RenderizadorJuego {
     }
 
     public void dibujar(SpriteBatch batch) {
-        // Dibuja elementos del juego (jugador e ítems)
+
         gestorControl.dibujarElementosJuego(batch);
-        // Dibuja HUD (puntos, vidas, nivel, pociones)
+
         gestorControl.dibujarHUDPrincipal(batch);
     }
 

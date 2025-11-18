@@ -2,6 +2,9 @@
 package puppy.code;
 
 import com.badlogic.gdx.graphics.Texture;
+import interfaces.IFabricaObjetosLluviosos;
+import objetosQueCaen.GloboAgua;
+import objetosQueCaen.Moneda;
 
 public class FabricaNivel3 implements IFabricaObjetosLluviosos {
 

@@ -1,13 +1,14 @@
-// Archivo: Persona.java
-package puppy.code;
+// Archivo: Paraguas.java
+package objetosQueCaen;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import Gestores.ReceptorAbstracto;
 
-public class Persona extends ReceptorAbstracto {
+public class Paraguas extends ReceptorAbstracto {
 
-    public Persona(Texture tex, Sound ss) {
+    public Paraguas(Texture tex, Sound ss) {
         super(tex, ss);
     }
 
@@ -19,5 +20,4 @@ public class Persona extends ReceptorAbstracto {
         this.limites.width = 64;
         this.limites.height = 64;
     }
-
 }

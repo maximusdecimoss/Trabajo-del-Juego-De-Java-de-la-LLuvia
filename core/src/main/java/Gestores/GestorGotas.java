@@ -1,4 +1,4 @@
-package puppy.code;
+package Gestores;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.math.MathUtils;
+import interfaces.IFabricaObjetosLluviosos;
+import objetosQueCaen.Escudo;
+import puppy.code.*;
 
 public class GestorGotas {
     private Array<ObjetoLluviosoAbstracto> objetosLluviosos;

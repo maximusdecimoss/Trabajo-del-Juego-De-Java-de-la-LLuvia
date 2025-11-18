@@ -1,6 +1,9 @@
 package puppy.code;
 
 import com.badlogic.gdx.graphics.Texture;
+import interfaces.IFabricaObjetosLluviosos;
+import objetosQueCaen.GotaBuena;
+import objetosQueCaen.GotaMala;
 
 public class FabricaNivel1 implements IFabricaObjetosLluviosos {
     private final Texture texMala;

@@ -1,6 +1,9 @@
 // Archivo: ContenedorPociones.java
 package puppy.code;
 
+import interfaces.IContenedorSuministros;
+import interfaces.IIteradorSuministros;
+
 /**
  * Contenedor de las pociones de vida del Vikingo.
  * Implementa IContenedorSuministros y define la lógica de la navegación interna.

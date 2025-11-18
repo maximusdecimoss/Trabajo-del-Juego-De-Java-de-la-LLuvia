@@ -1,8 +1,11 @@
 // Archivo: GotaBuena.java
 
-package puppy.code;
+package objetosQueCaen;
 
 import com.badlogic.gdx.graphics.Texture;
+import Gestores.GestorNiveles;
+import puppy.code.ObjetoLluviosoAbstracto;
+import Gestores.ReceptorAbstracto;
 
 public class GotaBuena extends ObjetoLluviosoAbstracto {
 

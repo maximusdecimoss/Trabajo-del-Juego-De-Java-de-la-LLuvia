@@ -1,4 +1,4 @@
-package puppy.code;
+package Gestores;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 
 /**
  * Clase Singleton para gestionar la carga y liberación de recursos del juego (texturas, sonidos, música).
- * Cumple con el principio de encapsulamiento al usar atributos privados y getters.
  * (Cumple GM1.5, GM2.1)
  */
 public class GestorRecursos {

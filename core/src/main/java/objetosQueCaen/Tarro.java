@@ -1,8 +1,9 @@
-package puppy.code;
+package objetosQueCaen;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import Gestores.ReceptorAbstracto;
 
 /**
  * Clase concreta para el Nivel 1. Hereda la lógica central del jugador.

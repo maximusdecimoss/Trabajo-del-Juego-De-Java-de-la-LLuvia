@@ -4,6 +4,7 @@ package puppy.code;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.MathUtils;
+import interfaces.IEstrategiaMovimiento;
 
 /**
  * Estrategia Concreta: Implementa el movimiento lateral de un lado a otro

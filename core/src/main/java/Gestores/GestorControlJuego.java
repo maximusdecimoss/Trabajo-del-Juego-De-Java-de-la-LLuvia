@@ -1,22 +1,22 @@
-package puppy.code;
+package Gestores;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.audio.Music;
-import puppy.code.Vikingo;
-import puppy.code.EstrategiaNormal;
+import objetosQueCaen.Vikingo;
+import puppy.code.*;
 
 public class GestorControlJuego {
-    private ReceptorAbstracto jugador;
-    private GestorGotas gestorGotas;
-    private GestorNiveles gestorNiveles;
-    private Music musicaLluvia;
-    private BitmapFont font;
-    private RenderizadorJuego renderizador; // Nuevo atributo
+    protected ReceptorAbstracto jugador;
+    protected GestorGotas gestorGotas;
+    protected GestorNiveles gestorNiveles;
+    protected Music musicaLluvia;
+    protected BitmapFont font;
+    protected RenderizadorJuego renderizador; // Nuevo atributo
 
-    // Constructor actualizado
+
     public GestorControlJuego(ReceptorAbstracto jugador, GestorGotas gestorGotas, GestorNiveles gestorNiveles, Music musicaLluvia, BitmapFont font) {
         this.jugador = jugador;
         this.gestorGotas = gestorGotas;
@@ -86,7 +86,5 @@ public class GestorControlJuego {
     }
 
     // Getter para el renderizador (usado por GameLluvia si es necesario)
-    public RenderizadorJuego getRenderizador() {
-        return renderizador;
-    }
+
 }

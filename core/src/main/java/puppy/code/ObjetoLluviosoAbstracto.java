@@ -1,8 +1,11 @@
 package puppy.code;
 
+import Gestores.GestorNiveles;
+import Gestores.ReceptorAbstracto;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import interfaces.IEstrategiaMovimiento;
 
 /**
  * Clase padre abstracta para todos los objetos que caen.
@@ -65,3 +68,4 @@ public abstract class ObjetoLluviosoAbstracto  {
 
 
 }
+

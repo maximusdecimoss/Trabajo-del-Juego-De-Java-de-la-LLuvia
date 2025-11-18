@@ -1,5 +1,6 @@
 package puppy.code;
 
+import Gestores.GestorGotas;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class RenderizadorGotas {

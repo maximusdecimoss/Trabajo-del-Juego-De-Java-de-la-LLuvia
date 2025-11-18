@@ -1,5 +1,7 @@
 // Archivo: IFabricaObjetosLluviosos.java
-package puppy.code;
+package interfaces;
+
+import puppy.code.ObjetoLluviosoAbstracto;
 
 public interface IFabricaObjetosLluviosos {
 

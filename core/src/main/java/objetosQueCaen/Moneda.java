@@ -1,7 +1,10 @@
 // Archivo: Moneda.java (Crea este archivo)
-package puppy.code;
+package objetosQueCaen;
 
 import com.badlogic.gdx.graphics.Texture;
+import Gestores.GestorNiveles;
+import puppy.code.ObjetoLluviosoAbstracto;
+import Gestores.ReceptorAbstracto;
 
 /**
  * Ítem de Nivel 3 (Moneda). Otorga puntos basados en el nivel actual (GM1.7).

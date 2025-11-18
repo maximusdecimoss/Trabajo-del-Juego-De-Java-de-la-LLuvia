@@ -1,7 +1,11 @@
 // Archivo: Hueso.java
-package puppy.code;
+package objetosQueCaen;
 
 import com.badlogic.gdx.graphics.Texture;
+import Gestores.GestorNiveles;
+import Gestores.GestorTiempo;
+import puppy.code.ObjetoLluviosoAbstracto;
+import Gestores.ReceptorAbstracto;
 
 public class Hueso extends ObjetoLluviosoAbstracto {
 

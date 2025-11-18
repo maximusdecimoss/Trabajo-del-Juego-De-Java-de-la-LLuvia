@@ -1,11 +1,13 @@
 // Archivo: Roca.java
-package puppy.code;
+package objetosQueCaen;
 
 import com.badlogic.gdx.graphics.Texture;
+import Gestores.GestorNiveles;
+import puppy.code.ObjetoLluviosoAbstracto;
+import Gestores.ReceptorAbstracto;
 
 /**
  * Ítem de Nivel 2. Causa daño DOBLE.
- * Hereda de ObjetoLluviosoFactorizado.
  */
 public class Roca extends ObjetoLluviosoAbstracto {
 

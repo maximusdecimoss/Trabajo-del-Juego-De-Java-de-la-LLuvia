@@ -1,5 +1,5 @@
 // Archivo: IEstrategiaMovimiento.java
-package puppy.code;
+package interfaces;
 import com.badlogic.gdx.math.Rectangle;
 /**
  * Define la interfaz del Patrón Strategy para la lógica de movimiento.

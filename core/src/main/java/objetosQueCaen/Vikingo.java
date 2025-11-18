@@ -1,9 +1,14 @@
 // Archivo: Vikingo.java
-package puppy.code;
+package objetosQueCaen;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import interfaces.IIteradorSuministros;
+import puppy.code.ContenedorPociones;
+import puppy.code.EstrategiaDoblePunto;
+import puppy.code.EstrategiaNormal;
+import Gestores.ReceptorAbstracto;
 
 public class Vikingo extends ReceptorAbstracto {
 

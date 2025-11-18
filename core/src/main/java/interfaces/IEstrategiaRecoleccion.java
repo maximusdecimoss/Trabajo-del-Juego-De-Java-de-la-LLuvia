@@ -1,5 +1,5 @@
 // Archivo: IEstrategiaRecoleccion.java
-package puppy.code;
+package interfaces;
 
 /**
  * Interfaz del Patrón Strategy (GM2.3). Define el contrato para la acción

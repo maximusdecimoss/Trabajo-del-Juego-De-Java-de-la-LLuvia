@@ -1,10 +1,10 @@
 package puppy.code;
 
+import Gestores.*;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 
 public class IniciadorJuego {
     private final GestorRecursos recursos;

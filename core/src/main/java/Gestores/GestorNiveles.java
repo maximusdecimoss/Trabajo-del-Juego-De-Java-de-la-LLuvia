@@ -1,8 +1,9 @@
-package puppy.code;
+package Gestores;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
+import objetosQueCaen.*;
 
 public class GestorNiveles {
     private final Array<Texture> texturasReceptores;
@@ -10,7 +11,7 @@ public class GestorNiveles {
     private int nivelActual = 1;
 
     // Umbrales de puntos para cada nivel
-    private static final int[] UMBRALES_NIVEL = {0, 150, 1000, 5000, 10000};
+    private static final int[] UMBRALES_NIVEL = {0, 30, 100, 200, 500};
 
     public GestorNiveles(Array<Texture> texturas, Sound sonidoHerido) {
         this.texturasReceptores = texturas;

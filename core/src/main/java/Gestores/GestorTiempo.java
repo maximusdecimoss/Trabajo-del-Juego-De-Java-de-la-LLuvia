@@ -1,4 +1,4 @@
-package puppy.code;
+package Gestores;
 
 /**
  * Implementa el Patrón Singleton (GM2.1) para gestionar el tiempo y la velocidad

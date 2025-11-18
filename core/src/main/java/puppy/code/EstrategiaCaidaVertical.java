@@ -3,6 +3,7 @@ package puppy.code;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
+import interfaces.IEstrategiaMovimiento;
 
 /**
  * Estrategia Concreta: Implementa la caída tradicional (arriba a abajo)

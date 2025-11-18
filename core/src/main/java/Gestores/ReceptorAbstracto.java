@@ -1,4 +1,4 @@
-package puppy.code;
+package Gestores;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -6,6 +6,8 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import interfaces.IEstrategiaRecoleccion;
+import puppy.code.EstrategiaNormal;
 
 /**
  * Clase padre abstracta para todos los receptores (Tarro, Paraguas, Vikingo, etc.).
