@@ -5,9 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import Gestores.ReceptorAbstracto;
 
-/**
- * Clase concreta para el Nivel 1. Hereda la lógica central del jugador.
- */
+
 public class Tarro extends ReceptorAbstracto {
 
     public Tarro(Texture tex, Sound ss) {

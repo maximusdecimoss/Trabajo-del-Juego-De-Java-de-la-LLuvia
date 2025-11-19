@@ -13,13 +13,8 @@ public class Pocion extends ObjetoLluviosoAbstracto {
     }
 
     @Override
-    public void aplicarEfecto(ReceptorAbstracto receptor, GestorNiveles gestor) {
-        // Bonificación de puntos alta
+    protected void aplicarEfectoEspecifico(ReceptorAbstracto receptor, GestorNiveles gestor) {
         receptor.sumarPuntos(300);
-
-        // El Vikingo usa el Iterator para gestionar sus pociones internas.
-        // NOTA: Esta poción de la lluvia solo da puntos, el jugador activa la poción real con [ESPACIO].
     }
-
 
 }

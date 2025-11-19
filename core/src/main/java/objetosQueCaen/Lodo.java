@@ -14,15 +14,9 @@ public class Lodo extends ObjetoLluviosoAbstracto {
     }
 
     @Override
-    public void aplicarEfecto(ReceptorAbstracto receptor, GestorNiveles gestor) {
-
-        // 1. Daño y Penalización (pierde vida y penaliza puntos)
+    protected void aplicarEfectoEspecifico(ReceptorAbstracto receptor, GestorNiveles gestor) {
         receptor.dañar(gestor);
-
-        // 2. Efecto de Lentitud (USA SINGLETON - GM2.1)
-        // Ralentiza un 50% (factor 0.5f) por 5 segundos.
         GestorTiempo.getInstancia().aplicarEfectoTemporal(0.5f, 5.0f);
     }
-
 
 }

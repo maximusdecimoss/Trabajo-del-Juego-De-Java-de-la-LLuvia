@@ -20,11 +20,7 @@ public class Moneda extends ObjetoLluviosoAbstracto {
 
 
     @Override
-    public void aplicarEfecto(ReceptorAbstracto receptor, GestorNiveles gestor) {
-        // La recompensa se basa en el nivel actual (GM1.7)
-        int nivelActual = gestor.getNivelActual();
-        int puntosGanados = nivelActual * 20; // 20 puntos base por nivel
-
-        receptor.sumarPuntos(puntosGanados);
+    protected void aplicarEfectoEspecifico(ReceptorAbstracto receptor, GestorNiveles gestor) {
+        receptor.sumarPuntos(gestor.getNivelActual() * 20);
     }
 }

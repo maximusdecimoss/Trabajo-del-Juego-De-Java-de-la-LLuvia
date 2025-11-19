@@ -1,12 +1,14 @@
 package Gestores;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.badlogic.gdx.math.MathUtils;
+
 import interfaces.IFabricaObjetosLluviosos;
 import objetosQueCaen.Escudo;
 import puppy.code.*;
@@ -14,7 +16,6 @@ import puppy.code.*;
 public class GestorGotas {
     private Array<ObjetoLluviosoAbstracto> objetosLluviosos;
     private long tiempoUltimaGota;
-    private Sound sonidoGota;
     private Music musicaLluvia;
     private final Texture texturaGotaBuena;
     private final Texture texturaGotaMala;
@@ -36,7 +37,6 @@ public class GestorGotas {
                        Texture texGotaCurativa) {
         this.texturaGotaBuena = texBuena;
         this.texturaGotaMala = texMala;
-        this.sonidoGota = sonido;
         this.musicaLluvia = musica;
         this.texturaRoca = texRoca;
         this.texturaEscudo = texEscudo;
@@ -52,19 +52,17 @@ public class GestorGotas {
     }
 
     public void crear() {
-        this.objetosLluviosos = new Array<>();
+        this.objetosLluviosos.clear();
         this.musicaLluvia.setLooping(true);
         this.musicaLluvia.play();
     }
 
     private void crearObjetoLluvioso(int nivelActual) {
-        float posicionX = (float) MathUtils.random(0, 736);
-        // Usar GestorRecursos para obtener la textura del escudo
+        float posicionX = MathUtils.random(0, 736);
         GestorRecursos recursos = GestorRecursos.getInstancia();
         ObjetoLluviosoAbstracto nuevoObjeto = null;
         int probabilidad = MathUtils.random(1, 100);
 
-        // Probabilidad: 30% malo, 60% bueno, 10% escudo (en niveles 2+)
         if (probabilidad <= 30) {
             nuevoObjeto = this.fabricaActual.crearObjetoMalo(posicionX);
         } else if (probabilidad <= 90 || nivelActual == 1) {
@@ -84,25 +82,36 @@ public class GestorGotas {
 
     public void actualizarMovimiento(ReceptorAbstracto receptor, GestorNiveles gestorNiveles) {
         int nivelActual = gestorNiveles.getNivelActual();
+
+        // Cambiar fábrica si subimos de nivel
         if (this.fabricaActual == null || !this.esFabricaCorrecta(nivelActual)) {
             this.fabricaActual = this.seleccionarFabrica(nivelActual);
             this.objetosLluviosos.clear();
         }
+
         float factorVelocidad = 1.0f + (nivelActual - 1) * 0.2f;
+
+        // Generar nueva gota según dificultad del nivel
         if (TimeUtils.nanoTime() - this.tiempoUltimaGota > (1000000000L * 2) / nivelActual) {
             this.crearObjetoLluvioso(nivelActual);
         }
+
+        // Actualizar y comprobar colisiones
         for (int i = 0; i < this.objetosLluviosos.size; ++i) {
             ObjetoLluviosoAbstracto objeto = this.objetosLluviosos.get(i);
             objeto.actualizar(factorVelocidad);
+
             if (objeto.estaFueraDePantalla()) {
                 this.objetosLluviosos.removeIndex(i);
                 --i;
                 continue;
             }
+
             if (objeto.obtenerLimites().overlaps(receptor.getArea())) {
-                objeto.aplicarEfecto(receptor, gestorNiveles);
-                this.sonidoGota.play();
+                // ¡AQUÍ ESTÁ EL TEMPLATE METHOD EN ACCIÓN! (GM2.2)
+                objeto.procesarColision(receptor, gestorNiveles);
+                // El sonido ya se reproduce dentro del Template Method → no lo repetimos
+
                 this.objetosLluviosos.removeIndex(i);
                 --i;
             }
@@ -146,5 +155,3 @@ public class GestorGotas {
         }
     }
 }
-
-

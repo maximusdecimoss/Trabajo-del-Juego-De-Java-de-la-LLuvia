@@ -11,14 +11,11 @@ public class GotaCurativa extends ObjetoLluviosoAbstracto {
     }
 
     @Override
-    public void aplicarEfecto(ReceptorAbstracto receptor, GestorNiveles gestor) {
-        // Suma 20 puntos (nivel 2, más valioso que GotaBuena)
+    protected void aplicarEfectoEspecifico(ReceptorAbstracto receptor, GestorNiveles gestor) {
         receptor.sumarPuntos(20);
-        // Restaura 1 vida si no está al máximo
         if (receptor.getVidas() < gestor.getVidasMaximas()) {
             receptor.setVidas(receptor.getVidas() + 1);
         }
     }
-
 
 }

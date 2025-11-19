@@ -11,9 +11,8 @@ public class Escudo extends ObjetoLluviosoAbstracto {
     }
 
     @Override
-    public void aplicarEfecto(ReceptorAbstracto receptor, GestorNiveles gestor) {
-        receptor.setTieneEscudo(true); // Activa el escudo
-        receptor.sumarPuntos(50); // Suma puntos por recoger el escudo
+    protected void aplicarEfectoEspecifico(ReceptorAbstracto receptor, GestorNiveles gestor) {
+        receptor.setTieneEscudo(true);
+        receptor.sumarPuntos(50);
     }
-
 }

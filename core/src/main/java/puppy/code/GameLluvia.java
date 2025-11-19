@@ -28,7 +28,7 @@ public class GameLluvia extends ApplicationAdapter {
         this.batch.setProjectionMatrix(camera.combined);
         this.font = new BitmapFont();
         this.iniciador = new IniciadorJuego(this.font, GestorRecursos.getInstancia().getMRain());
-        this.gestorControl = this.iniciador.gestorControl;
+        this.gestorControl = this.iniciador.getGestorControl();
     }
 
     @Override

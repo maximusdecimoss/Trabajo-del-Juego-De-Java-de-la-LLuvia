@@ -16,18 +16,10 @@ public class Roca extends ObjetoLluviosoAbstracto {
     }
 
     @Override
-    public void aplicarEfecto(ReceptorAbstracto receptor, GestorNiveles gestor) {
-        // La Roca causa el daño estándar del nivel...
+    protected void aplicarEfectoEspecifico(ReceptorAbstracto receptor, GestorNiveles gestor) {
         receptor.dañar(gestor);
-
-        // ... Y luego aplicamos una penalización extra (daño doble)
-        int penalizacionExtra = gestor.obtenerPenalizacionPorNivel();
-        receptor.sumarPuntos(-penalizacionExtra);
-
-        // Aseguramos que los puntos no sean negativos
-        if (receptor.getPuntos() < 0) {
-            receptor.sumarPuntos(receptor.getPuntos() * -1);
-        }
+        receptor.sumarPuntos(-gestor.obtenerPenalizacionPorNivel());
+        if (receptor.getPuntos() < 0) receptor.setPuntos(0);
     }
 
 

@@ -14,9 +14,7 @@ public class GotaBuena extends ObjetoLluviosoAbstracto {
     }
 
     @Override
-    // Implementa la nueva firma: recibe el receptor y el gestor de niveles
-    public void aplicarEfecto(ReceptorAbstracto receptor, GestorNiveles gestor) {
-        // Efecto: Sumar 10 puntos (independiente del nivel)
+    protected void aplicarEfectoEspecifico(ReceptorAbstracto receptor, GestorNiveles gestor) {
         receptor.sumarPuntos(10);
     }
 
