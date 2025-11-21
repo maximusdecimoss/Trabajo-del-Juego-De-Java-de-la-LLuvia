@@ -58,9 +58,9 @@ public abstract class ObjetoLluviosoAbstracto {
     }
 
     protected void aplicarEfectoComun(ReceptorAbstracto receptor, GestorNiveles gestor) {
-        // Hook para lógica común futura (por ejemplo: todos suman 5 puntos base)
+
     }
 
     protected abstract void aplicarEfectoEspecifico(ReceptorAbstracto receptor, GestorNiveles gestor);
-    // =====================================================================
+
 }

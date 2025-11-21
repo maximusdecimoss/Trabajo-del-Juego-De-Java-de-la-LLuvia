@@ -24,9 +24,7 @@ public class EstrategiaMovimientoLateral implements IEstrategiaMovimiento {
     public void mover(Rectangle limites, float velocidadCaida, float factorVelocidad) {
         float delta = Gdx.graphics.getDeltaTime();
 
-        // 1. Calcular el factor de movimiento lateral usando el tiempo y la posición.
-        // Usaremos Math.cos(Gdx.graphics.getDeltaTime() * 10) para crear una onda
-        // de movimiento que se sienta más natural e impredecible.
+
         float factorOnda = (float) Math.cos(limites.y / 100f + Gdx.graphics.getDeltaTime() * 100);
 
         // La velocidad real de movimiento horizontal es fija y se multiplica por la onda

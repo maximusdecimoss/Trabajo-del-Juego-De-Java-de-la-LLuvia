@@ -8,13 +8,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import interfaces.IEstrategiaRecoleccion;
 import puppy.code.EstrategiaNormal;
+import interfaces.IDibujable;
 
-/**
- * Clase padre abstracta para todos los receptores (Tarro, Paraguas, Vikingo, etc.).
- * Contiene la lógica común de estadísticas, movimiento y colisión.
- * (Cumple GM1.4)
- */
-public abstract class ReceptorAbstracto  {
+public abstract class ReceptorAbstracto implements IDibujable {
     protected IEstrategiaRecoleccion estrategiaRecoleccion;
     protected Rectangle limites;
     protected Texture imagen;

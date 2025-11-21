@@ -7,10 +7,6 @@ package interfaces;
  */
 public interface IEstrategiaRecoleccion {
 
-    /**
-     * Define la fórmula para calcular el puntaje a sumar por el ítem.
-     * @param puntajeBase El valor base del ítem (ej. 10, 25, 50).
-     * @return El puntaje final a sumar.
-     */
+
     int sumarPuntos(int puntajeBase);
 }
