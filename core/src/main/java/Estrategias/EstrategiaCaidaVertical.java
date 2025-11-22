@@ -1,5 +1,5 @@
 // Archivo: EstrategiaCaidaVertical.java
-package puppy.code;
+package Estrategias;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;

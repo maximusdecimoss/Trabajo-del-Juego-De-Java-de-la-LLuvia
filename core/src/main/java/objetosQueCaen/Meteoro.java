@@ -1,10 +1,10 @@
-// Archivo: Meteoro.java (CORREGIDO)
+// Meteoro.java
 package objetosQueCaen;
 
 import com.badlogic.gdx.graphics.Texture;
 import Gestores.GestorNiveles;
-import puppy.code.ObjetoLluviosoAbstracto;
 import Gestores.ReceptorAbstracto;
+import puppy.code.ObjetoLluviosoAbstracto;
 
 public class Meteoro extends ObjetoLluviosoAbstracto {
 
@@ -14,10 +14,9 @@ public class Meteoro extends ObjetoLluviosoAbstracto {
     }
 
     @Override
-    protected void aplicarEfectoEspecifico(ReceptorAbstracto receptor, GestorNiveles gestor) {
+    protected void pasoEspecificoEfecto(ReceptorAbstracto receptor, GestorNiveles gestor) {
         receptor.dañar(gestor);
         receptor.sumarPuntos(-300);
         if (receptor.getPuntos() < 0) receptor.setPuntos(0);
     }
 }
-

@@ -1,23 +1,21 @@
 package Gestores;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import interfaces.IEstrategiaRecoleccion;
-import puppy.code.EstrategiaNormal;
 import interfaces.IDibujable;
+import interfaces.IEstrategiaRecoleccion;
+import Estrategias.EstrategiaNormal;
 
 public abstract class ReceptorAbstracto implements IDibujable {
-    protected IEstrategiaRecoleccion estrategiaRecoleccion;
+
+    protected IEstrategiaRecoleccion estrategiaRecoleccion = new EstrategiaNormal();
     protected Rectangle limites;
     protected Texture imagen;
     protected Sound sonidoHerido;
     protected int vidas = 3;
     protected int puntos = 0;
-    protected int velx = 400;
     protected boolean herido = false;
     protected int tiempoHeridoMax = 50;
     protected int tiempoHerido;
@@ -29,99 +27,72 @@ public abstract class ReceptorAbstracto implements IDibujable {
     public ReceptorAbstracto(Texture tex, Sound ss) {
         this.imagen = tex;
         this.sonidoHerido = ss;
-        this.estrategiaRecoleccion = new EstrategiaNormal();
-    }
-
-    public void setPuntos(int nuevosPuntos) {
-        this.puntos = nuevosPuntos;
-    }
-
-    public void setVidas(int nuevasVidas) {
-        this.vidas = nuevasVidas;
     }
 
     public abstract void crear();
 
     public void dañar(GestorNiveles gestor) {
-        if (this.tieneEscudo) {
-            this.tieneEscudo = false;
+        if (tieneEscudo) {
+            tieneEscudo = false;
             return;
         }
-        if (this.vidas > 0) {
-            --this.vidas;
+        if (vidas > 0) {
+            vidas--;
             int penalizacion = gestor.obtenerPenalizacionPorNivel();
-            this.puntos -= penalizacion;
-            if (this.puntos < 0) {
-                this.puntos = 0;
-            }
-            this.herido = true;
-            this.tiempoHerido = this.tiempoHeridoMax;
-            this.sonidoHerido.play();
+            puntos -= penalizacion;
+            if (puntos < 0) puntos = 0;
+            herido = true;
+            tiempoHerido = tiempoHeridoMax;
+            sonidoHerido.play();
         }
     }
 
     public boolean isGameOver() {
-        return this.vidas <= 0;
+        return vidas <= 0;
     }
 
     public boolean estaHerido() {
         return herido;
     }
 
-    public void actualizarMovimiento(boolean permitirMovimientoVertical) {
-        float factorSingleton = GestorTiempo.getInstancia().getFactorVelocidadGlobal();
-        float velocidadReal = VELOCIDAD_BASE * factorSingleton;
+    public void actualizarMovimiento(boolean permitirVertical) {
+        float factor = GestorTiempo.getInstancia().getFactorVelocidadGlobal();
+        float velocidadReal = VELOCIDAD_BASE * factor;
 
-        // Movimiento Lateral (X)
-        float nuevaX = this.limites.x;
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            nuevaX -= velocidadReal * Gdx.graphics.getDeltaTime();
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            nuevaX += velocidadReal * Gdx.graphics.getDeltaTime();
-        }
+        float nuevaX = limites.x;
+        if (com.badlogic.gdx.Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.LEFT)) nuevaX -= velocidadReal * com.badlogic.gdx.Gdx.graphics.getDeltaTime();
+        if (com.badlogic.gdx.Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.RIGHT)) nuevaX += velocidadReal * com.badlogic.gdx.Gdx.graphics.getDeltaTime();
 
-        // Movimiento Vertical (Y) - Solo si se permite (Nivel 3)
-        float nuevaY = this.limites.y;
-        if (permitirMovimientoVertical) {
-            if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-                nuevaY += velocidadReal * Gdx.graphics.getDeltaTime();
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-                nuevaY -= velocidadReal * Gdx.graphics.getDeltaTime();
-            }
+        float nuevaY = limites.y;
+        if (permitirVertical) {
+            if (com.badlogic.gdx.Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.UP)) nuevaY += velocidadReal * com.badlogic.gdx.Gdx.graphics.getDeltaTime();
+            if (com.badlogic.gdx.Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.DOWN)) nuevaY -= velocidadReal * com.badlogic.gdx.Gdx.graphics.getDeltaTime();
         }
 
-        // Aplicar límites
-        this.limites.x = Math.max(0, Math.min(nuevaX, 800 - ANCHO_RECEPTOR));
-        this.limites.y = Math.max(0, Math.min(nuevaY, 480 - ALTO_RECEPTOR));
+        limites.x = Math.max(0, Math.min(nuevaX, 800 - ANCHO_RECEPTOR));
+        limites.y = Math.max(0, Math.min(nuevaY, 480 - ALTO_RECEPTOR));
     }
 
     public void dibujar(SpriteBatch batch) {
-        batch.draw(
-            this.imagen,
-            this.limites.x,
-            this.limites.y,
-            ANCHO_RECEPTOR,
-            ALTO_RECEPTOR
-        );
+        batch.draw(imagen, limites.x, limites.y, ANCHO_RECEPTOR, ALTO_RECEPTOR);
     }
 
-    public int getVidas() { return this.vidas; }
-    public int getPuntos() { return this.puntos; }
-    public Rectangle getArea() { return this.limites; }
+    public int getVidas() { return vidas; }
+    public int getPuntos() { return puntos; }
+    public Rectangle getArea() { return limites; }
+    public boolean tieneEscudo() { return tieneEscudo; }
+
+
+    public void setTieneEscudo(boolean b) { this.tieneEscudo = b; }
+    public void setPuntos(int nuevosPuntos) { this.puntos = nuevosPuntos; }
+    public void setVidas(int nuevasVidas) { this.vidas = nuevasVidas; }
 
     public void sumarPuntos(int puntajeBase) {
-        int puntosASumar = this.estrategiaRecoleccion.sumarPuntos(puntajeBase);
-        this.puntos += puntosASumar;
+        int puntosFinales = estrategiaRecoleccion.sumarPuntos(puntajeBase);
+        this.puntos += puntosFinales;
     }
 
-    public void setEstrategiaRecoleccion(IEstrategiaRecoleccion nuevaEstrategia) {
-        this.estrategiaRecoleccion = nuevaEstrategia;
+    public void setEstrategiaRecoleccion(IEstrategiaRecoleccion nueva) {
+        this.estrategiaRecoleccion = nueva;
     }
-
-    public void setTieneEscudo(boolean tieneEscudo) { this.tieneEscudo = tieneEscudo; }
-    public boolean tieneEscudo() { return this.tieneEscudo; }
-
-
 }

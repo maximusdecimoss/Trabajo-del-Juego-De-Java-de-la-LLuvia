@@ -5,8 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.audio.Music;
-import puppy.code.EstrategiaDoblePunto;
-import puppy.code.EstrategiaNormal;
+import Estrategias.EstrategiaNormal;
 import puppy.code.RenderizadorJuego;
 /**
  * Controlador principal del juego - VERSIÓN FINAL 100% FUNCIONAL

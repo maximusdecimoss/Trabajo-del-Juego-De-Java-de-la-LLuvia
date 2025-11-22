@@ -1,10 +1,11 @@
 // Archivo: FabricaNivel3.java
-package puppy.code;
+package Estrategias;
 
 import com.badlogic.gdx.graphics.Texture;
 import interfaces.IFabricaObjetosLluviosos;
 import objetosQueCaen.GloboAgua;
 import objetosQueCaen.Moneda;
+import puppy.code.ObjetoLluviosoAbstracto;
 
 public class FabricaNivel3 implements IFabricaObjetosLluviosos {
 

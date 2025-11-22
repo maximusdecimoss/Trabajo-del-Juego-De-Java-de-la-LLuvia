@@ -1,5 +1,7 @@
+// ObjetoLluviosoAbstracto.java
 package puppy.code;
 
+import Estrategias.EstrategiaCaidaVertical;
 import Gestores.GestorNiveles;
 import Gestores.GestorRecursos;
 import Gestores.ReceptorAbstracto;
@@ -7,12 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import interfaces.IEstrategiaMovimiento;
-import puppy.code.EstrategiaCaidaVertical;
 
-/**
- * Clase padre abstracta para todos los objetos que caen.
- * PATRÓN TEMPLATE METHOD (GM2.2) aplicado aquí.
- */
 public abstract class ObjetoLluviosoAbstracto {
 
     protected IEstrategiaMovimiento estrategiaMovimiento;
@@ -26,8 +23,8 @@ public abstract class ObjetoLluviosoAbstracto {
         this.estrategiaMovimiento = new EstrategiaCaidaVertical();
     }
 
-    public void setEstrategiaMovimiento(IEstrategiaMovimiento nuevaEstrategia) {
-        this.estrategiaMovimiento = nuevaEstrategia;
+    public void setEstrategiaMovimiento(IEstrategiaMovimiento nueva) {
+        this.estrategiaMovimiento = nueva;
     }
 
     public void actualizar(float factorVelocidad) {
@@ -46,21 +43,14 @@ public abstract class ObjetoLluviosoAbstracto {
         return limites;
     }
 
-    // ====================== TEMPLATE METHOD (GM2.2) ======================
     public final void procesarColision(ReceptorAbstracto receptor, GestorNiveles gestor) {
-        reproducirSonidoColision();
-        aplicarEfectoComun(receptor, gestor);
-        aplicarEfectoEspecifico(receptor, gestor);
+        pasoGenericoSonido();
+        pasoEspecificoEfecto(receptor, gestor);
     }
 
-    private void reproducirSonidoColision() {
+    private void pasoGenericoSonido() {
         GestorRecursos.getInstancia().getSDrop().play();
     }
 
-    protected void aplicarEfectoComun(ReceptorAbstracto receptor, GestorNiveles gestor) {
-
-    }
-
-    protected abstract void aplicarEfectoEspecifico(ReceptorAbstracto receptor, GestorNiveles gestor);
-
+    protected abstract void pasoEspecificoEfecto(ReceptorAbstracto receptor, GestorNiveles gestor);
 }

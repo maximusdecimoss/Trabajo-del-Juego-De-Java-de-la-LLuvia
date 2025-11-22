@@ -1,11 +1,10 @@
-// Archivo: GotaMala.java
-
+// GotaMala.java
 package objetosQueCaen;
 
 import com.badlogic.gdx.graphics.Texture;
 import Gestores.GestorNiveles;
-import puppy.code.ObjetoLluviosoAbstracto;
 import Gestores.ReceptorAbstracto;
+import puppy.code.ObjetoLluviosoAbstracto;
 
 public class GotaMala extends ObjetoLluviosoAbstracto {
 
@@ -14,8 +13,7 @@ public class GotaMala extends ObjetoLluviosoAbstracto {
     }
 
     @Override
-    protected void aplicarEfectoEspecifico(ReceptorAbstracto receptor, GestorNiveles gestor) {
+    protected void pasoEspecificoEfecto(ReceptorAbstracto receptor, GestorNiveles gestor) {
         receptor.dañar(gestor);
     }
-
 }

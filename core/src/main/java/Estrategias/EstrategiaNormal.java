@@ -1,5 +1,5 @@
 // Archivo: EstrategiaNormal.java
-package puppy.code;
+package Estrategias;
 
 import interfaces.IEstrategiaRecoleccion;
 

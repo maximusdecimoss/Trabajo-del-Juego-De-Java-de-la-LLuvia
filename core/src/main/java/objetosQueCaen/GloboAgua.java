@@ -1,24 +1,19 @@
-// Archivo: GloboAgua.java (Crea este archivo)
+// GloboAgua.java
 package objetosQueCaen;
 
 import com.badlogic.gdx.graphics.Texture;
 import Gestores.GestorNiveles;
-import puppy.code.ObjetoLluviosoAbstracto;
 import Gestores.ReceptorAbstracto;
+import puppy.code.ObjetoLluviosoAbstracto;
 
-/**
- * Ítem de Nivel 3 (Globo de Agua). Causa daño normal y resetea los puntos al mínimo del nivel actual.
- * Hereda de ObjetoLluviosoFactorizado.
- */
 public class GloboAgua extends ObjetoLluviosoAbstracto {
 
     public GloboAgua(Texture textura, float posicionX) {
         super(textura, posicionX);
     }
 
-
     @Override
-    protected void aplicarEfectoEspecifico(ReceptorAbstracto receptor, GestorNiveles gestor) {
+    protected void pasoEspecificoEfecto(ReceptorAbstracto receptor, GestorNiveles gestor) {
         receptor.dañar(gestor);
         int nivelActual = gestor.getNivelActual();
         int puntajeMinimoNivel = (nivelActual - 1) * 500;
@@ -26,6 +21,4 @@ public class GloboAgua extends ObjetoLluviosoAbstracto {
             receptor.setPuntos(puntajeMinimoNivel);
         }
     }
-
 }
-

@@ -1,5 +1,5 @@
 // Archivo: EstrategiaDoblePunto.java
-package puppy.code;
+package Estrategias;
 
 import interfaces.IEstrategiaRecoleccion;
 

@@ -1,10 +1,11 @@
 // Archivo: FabricaNivel4.java
-package puppy.code;
+package Estrategias;
 
 import com.badlogic.gdx.graphics.Texture;
 import interfaces.IFabricaObjetosLluviosos;
 import objetosQueCaen.Hueso;
 import objetosQueCaen.Lodo;
+import puppy.code.ObjetoLluviosoAbstracto;
 
 public class FabricaNivel4 implements IFabricaObjetosLluviosos {
 

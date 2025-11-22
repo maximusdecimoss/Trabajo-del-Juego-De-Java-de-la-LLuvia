@@ -1,9 +1,10 @@
 package Gestores;
 
+import Estrategias.EstrategiaDoblePunto;
+import Estrategias.EstrategiaNormal;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
-import puppy.code.*;
 
 /**
  * ÚNICA clase del jugador. Evoluciona por niveles y en nivel 5 tiene habilidades de Vikingo.

@@ -1,10 +1,10 @@
-// Archivo: Pocion.java
+// Pocion.java
 package objetosQueCaen;
 
 import com.badlogic.gdx.graphics.Texture;
 import Gestores.GestorNiveles;
-import puppy.code.ObjetoLluviosoAbstracto;
 import Gestores.ReceptorAbstracto;
+import puppy.code.ObjetoLluviosoAbstracto;
 
 public class Pocion extends ObjetoLluviosoAbstracto {
 
@@ -13,8 +13,7 @@ public class Pocion extends ObjetoLluviosoAbstracto {
     }
 
     @Override
-    protected void aplicarEfectoEspecifico(ReceptorAbstracto receptor, GestorNiveles gestor) {
+    protected void pasoEspecificoEfecto(ReceptorAbstracto receptor, GestorNiveles gestor) {
         receptor.sumarPuntos(300);
     }
-
 }

@@ -1,11 +1,11 @@
-// Archivo: Hueso.java
+// Hueso.java
 package objetosQueCaen;
 
 import com.badlogic.gdx.graphics.Texture;
 import Gestores.GestorNiveles;
 import Gestores.GestorTiempo;
-import puppy.code.ObjetoLluviosoAbstracto;
 import Gestores.ReceptorAbstracto;
+import puppy.code.ObjetoLluviosoAbstracto;
 
 public class Hueso extends ObjetoLluviosoAbstracto {
 
@@ -14,7 +14,7 @@ public class Hueso extends ObjetoLluviosoAbstracto {
     }
 
     @Override
-    protected void aplicarEfectoEspecifico(ReceptorAbstracto receptor, GestorNiveles gestor) {
+    protected void pasoEspecificoEfecto(ReceptorAbstracto receptor, GestorNiveles gestor) {
         receptor.sumarPuntos(gestor.getNivelActual() * 25);
         GestorTiempo.getInstancia().aplicarEfectoTemporal(1.5f, 3.0f);
     }
