@@ -9,7 +9,7 @@ public class GestorNiveles {
     private final Sound sonidoHerido;
     private int nivelActual = 1;
 
-    private static final int[] UMBRALES_NIVEL = {0, 30, 100, 200, 500, 1500};
+    private static final int[] UMBRALES_NIVEL = {0, 50, 300, 1000, 3000};
 
     public GestorNiveles(Array<Texture> texturas, Sound sonidoHerido) {
         this.texturasReceptores = texturas;
@@ -46,7 +46,7 @@ public class GestorNiveles {
     }
 
     public boolean ganoJuego(int puntos) {
-        return puntos >= 15000;
+        return puntos >= 10000;
     }
 
     public int obtenerPenalizacionPorNivel() {
