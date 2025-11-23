@@ -1,9 +1,6 @@
 package Gestores;
 
-/**
- * Implementa el Patrón Singleton (GM2.1) para gestionar el tiempo y la velocidad
- * de todos los objetos en el juego.
- */
+
 public class GestorTiempo {
 
     // 1. INSTANCIA ÚNICA (Singleton)
@@ -16,7 +13,7 @@ public class GestorTiempo {
 
     // 2. CONSTRUCTOR PRIVADO
     private GestorTiempo() {
-        // Inicialización simple
+
     }
 
     // 3. ACCESO PÚBLICO A LA INSTANCIA (Punto de acceso global)

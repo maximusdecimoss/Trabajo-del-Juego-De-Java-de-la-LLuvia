@@ -99,7 +99,7 @@ public class GestorGotas {
         tiempoUltimaGota = TimeUtils.nanoTime();
     }
 
-    // MÉTODO PÚBLICO QUE TE FALTABA – ESTO ARREGLA EL ERROR
+
     public void actualizarDibujoLluvia(SpriteBatch batch) {
         for (ObjetoLluviosoAbstracto objeto : objetosLluviosos) {
             objeto.dibujar(batch);

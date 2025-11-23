@@ -13,7 +13,7 @@ public class EstrategiaCaidaVertical implements IEstrategiaMovimiento {
 
     @Override
     public void mover(Rectangle limites, float velocidadCaida, float factorVelocidad) {
-        // La lógica original de movimiento: solo el eje Y
+
         limites.y -= velocidadCaida * factorVelocidad * Gdx.graphics.getDeltaTime();
     }
 }
