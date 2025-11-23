@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 
 /**
  * Clase Singleton para gestionar la carga y liberación de recursos del juego (texturas, sonidos, música).
- * (Cumple GM1.5, GM2.1)
  */
 public class GestorRecursos {
     private static GestorRecursos instancia = null;

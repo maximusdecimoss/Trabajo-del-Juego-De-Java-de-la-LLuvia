@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Rectangle;
  */
 public class ReceptorEvolutivo extends ReceptorAbstracto {
 
-    // === ATRIBUTOS DEL VIKINGO (nivel 5) ===
+    // ATRIBUTOS DEL VIKINGO (nivel 5)
     private int pocionesRestantes = 0;  // Empieza en 0, se activan en nivel 5
 
     public ReceptorEvolutivo(Texture texturaInicial, Sound sonidoHerido) {

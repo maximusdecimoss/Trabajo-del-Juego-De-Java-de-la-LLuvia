@@ -33,10 +33,7 @@ public class GestorTiempo {
         }
     }
 
-    // MÉTODOS PÚBLICOS
-    /**
-     * Devuelve el factor de velocidad actual que aplica a todos los objetos.
-     */
+
     public float getFactorVelocidadGlobal() { // <--- NOMBRE CORREGIDO
         return factorVelocidadGlobal;
     }

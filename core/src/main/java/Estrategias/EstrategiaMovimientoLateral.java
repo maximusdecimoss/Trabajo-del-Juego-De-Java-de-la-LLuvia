@@ -25,9 +25,9 @@ public class EstrategiaMovimientoLateral implements IEstrategiaMovimiento {
 
         float velocidadHorizontal = velocidadCaida * factorVelocidad * delta * direccionInicial;
 
-        // 2. Mover lateralmente y verticalmente (Muy lento)
+
         limites.x += velocidadHorizontal;
-        limites.y -= (velocidadCaida * factorVelocidad * delta * 0.1f); // Movimiento vertical lento
+        limites.y -= (velocidadCaida * factorVelocidad * delta * 0.1f);
 
         if (limites.x < 0 - limites.width) {
             limites.x = 800;

@@ -15,9 +15,9 @@ public interface IIteradorSuministros {
     boolean tieneSiguiente();
 
     /**
-     * Devuelve el elemento actual y avanza el índice al siguiente.
-     * En este caso, devuelve un marcador de poción o null.
-     * @return El siguiente objeto de la colección.
+     Devuelve el elemento actual y avanza el índice al siguiente.
+     En este caso, devuelve un marcador de poción o null.
+     @return El siguiente objeto de la colección.
      */
     Object siguiente();
 }

@@ -7,10 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.audio.Music;
 import Estrategias.EstrategiaNormal;
 import puppy.code.RenderizadorJuego;
-/**
- * Controlador principal del juego - VERSIÓN FINAL 100% FUNCIONAL
- * Compatible con Java 11 - Sin casts peligrosos - Nivel 5 perfecto
- */
+
 public class GestorControlJuego {
 
     private  ReceptorAbstracto jugador;
@@ -53,7 +50,7 @@ public class GestorControlJuego {
 
         gestorGotas.actualizarMovimiento(jugador, gestorNiveles);
 
-        // === HABILIDADES DEL VIKINGO (NIVEL 5) - SIN CLASE VIKINGO ===
+        // === HABILIDADES DEL VIKINGO (NIVEL 5)
         if (gestorNiveles.getNivelActual() == 5 && jugador instanceof ReceptorEvolutivo) {
             ReceptorEvolutivo vikingo = (ReceptorEvolutivo) jugador;
 

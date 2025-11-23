@@ -39,13 +39,13 @@ public class Vikingo extends ReceptorAbstracto {
 
     // MÉTODO PARA USAR UNA POCIÓN (Lógica principal del Iterator)
     public boolean usarPocion() {
-        // Llamamos al método que marca la poción como consumida y avanza.
+
         Object resultado = iteradorPociones.siguiente();
 
         if (resultado != null && (boolean) resultado) {
             // Si el iterador devolvió 'true', significa que se consumió una poción fresca.
             this.vidas += 1; // Le da 1 vida extra al Vikingo
-            this.pocionesRestantes--; // Actualiza el contador visible
+            this.pocionesRestantes--;
             return true;
         }
         return false; // No quedan más pociones o el iterador ya terminó.
